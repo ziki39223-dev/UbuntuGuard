@@ -45,7 +45,7 @@
 
 ## 后续可选事项
 
-1. 在真实云主机补一轮 UFW/auditd/公网暴露验证（R-018）。
+1. 在真实云主机补一轮公网暴露（SSH 端口、安全组）与云厂商镜像验证；ufw/auditd/AIDE 行为已由 CI 集成任务覆盖（R-018）。
 2. 关注 CIS 官方 PDF 版本更新，按需复核 `docs/CIS_MAPPING.md`。
 3. 如需 Launchpad PPA，可基于现有源码用 `dpkg-buildpackage -S -sa -k<指纹>` 生成 `.dsc`/`.changes` 后 `dput` 上传。
 

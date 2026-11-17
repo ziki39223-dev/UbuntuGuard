@@ -1,7 +1,7 @@
 # UbuntuGuard
 
 [![CI](https://github.com/ziki39223-dev/UbuntuGuard/actions/workflows/ci.yml/badge.svg)](https://github.com/ziki39223-dev/UbuntuGuard/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/ziki39223-dev/UbuntuGuard)](https://github.com/ziki39223-dev/UbuntuGuard/releases/tag/v1.0.0)
+[![Release](https://img.shields.io/github/v/release/ziki39223-dev/UbuntuGuard)](https://github.com/ziki39223-dev/UbuntuGuard/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 面向 Ubuntu 22.04 / 24.04 的自动化安全运维与主机健康保障 CLI 工具。
