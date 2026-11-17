@@ -89,3 +89,35 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ubuntuguard
           ubuntuguard --version
+
+  integration:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build and system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y debhelper devscripts dh-python pybuild-plugin-pyproject \
+            build-essential python3-all python3-setuptools \
+            ufw auditd aide openssh-server jq
+      - name: Build deb
+        run: |
+          chmod +x debian/rules debian/postinst debian/prerm debian/postrm
+          chmod -x debian/install systemd/*
+          dpkg-buildpackage -us -uc -b
+      - name: Install deb
+        run: sudo dpkg -i ../ubuntuguard_*_all.deb || sudo apt-get -f install -y
+      - name: Enable services
+        run: |
+          sudo systemctl enable --now auditd
+          sudo systemctl enable --now ssh
+          systemctl is-active auditd ssh
+      - name: Run integration test
+        run: sudo env OUT_DIR="$PWD/integration-out" REQUIRE_AUDITD=1 bash scripts/integration-test.sh
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-evidence
+          path: integration-out/
+          if-no-files-found: ignore

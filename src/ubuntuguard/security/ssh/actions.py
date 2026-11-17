@@ -76,14 +76,15 @@ class SshHardeningAction(HardeningAction):
                 verified=False,
                 detail=f"sshd -t failed: {syntax.stderr.strip() or syntax.stdout.strip()}",
             )
-        reload_result = executor.run(["systemctl", "reload", "ssh"])
-        if not reload_result.ok:
-            return ActionResult(
-                self.name,
-                applied=True,
-                verified=False,
-                detail=f"reload failed: {reload_result.stderr.strip()}",
-            )
+        if _service_active(executor):
+            reload_result = executor.run(["systemctl", "reload", "ssh"])
+            if not reload_result.ok:
+                return ActionResult(
+                    self.name,
+                    applied=True,
+                    verified=False,
+                    detail=f"reload failed: {reload_result.stderr.strip()}",
+                )
 
         effective = _parse_effective(executor.run(["sshd", "-T"]).stdout)
         desired = _parse_effective(change.after)
@@ -99,10 +100,17 @@ class SshHardeningAction(HardeningAction):
                 verified=False,
                 detail=f"effective config mismatch: {mismatched}",
             )
-        return ActionResult(self.name, applied=True, verified=True, detail="ssh reloaded")
+        return ActionResult(self.name, applied=True, verified=True, detail="ssh verified")
 
     def rollback(self, plan: ChangePlan, executor: CommandExecutor) -> bool:
+        if not _service_active(executor):
+            return True
         return executor.run(["systemctl", "reload", "ssh"]).ok
+
+
+def _service_active(executor: CommandExecutor) -> bool:
+    status = executor.run(["systemctl", "is-active", "ssh"])
+    return status.ok and status.stdout.strip() == "active"
 
 
 def render_sshd_dropin(config: Config) -> str:

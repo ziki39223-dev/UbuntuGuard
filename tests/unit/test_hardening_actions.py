@@ -64,6 +64,41 @@ def test_ssh_plan_and_apply(
     assert target.read_text(encoding="utf-8") == content
 
 
+def test_ssh_apply_skips_reload_when_service_is_inactive(
+    tmp_path: Path,
+    make_snapshot: Callable[..., SystemSnapshot],
+    config: Config,
+    fake_executor,
+) -> None:
+    target = tmp_path / "99-ubuntuguard.conf"
+    action = SshHardeningAction(target)
+    snapshot = make_snapshot(
+        ssh=SshInfo(effective={"passwordauthentication": "yes"}, source="sshd -T")
+    )
+    plan = action.plan(snapshot, config)
+    assert plan is not None
+
+    desired: dict[str, str] = {}
+    for line in plan.changes[0].after.splitlines():
+        if not line.strip() or line.startswith("#"):
+            continue
+        key, _, value = line.partition(" ")
+        desired[key.lower()] = value.strip().lower()
+
+    fake_executor.responses[("systemctl", "is-active", "ssh")] = CommandResult(
+        argv=("systemctl", "is-active", "ssh"), returncode=3, stdout="inactive\n"
+    )
+    fake_executor.responses[("sshd", "-t")] = _ok(("sshd", "-t"))
+    fake_executor.responses[("sshd", "-T")] = _ok(
+        ("sshd", "-T"), "\n".join(f"{key} {value}" for key, value in desired.items())
+    )
+
+    outcome = action.apply(plan, fake_executor)  # type: ignore[arg-type]
+
+    assert outcome.verified
+    assert ("systemctl", "reload", "ssh") not in fake_executor.calls
+
+
 def test_ssh_invalid_config_is_not_verified(
     tmp_path: Path,
     make_snapshot: Callable[..., SystemSnapshot],
