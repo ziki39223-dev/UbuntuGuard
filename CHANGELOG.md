@@ -2,6 +2,15 @@
 
 格式参考 Keep a Changelog，版本遵循语义化版本。
 
+## [1.1.0] - 2026-11-17
+
+### Added
+
+- **本地 Web 控制台**：`ubuntuguard web --port 8080`，提供总览、基线审计、安全加固、异常检测、健康监控、备份恢复和报告七个视图。仅使用标准库 `http.server`，默认绑定回环地址，POST 动作校验页面注入的随机 token；加固应用需输入 `APPLY` 二次确认，仍走快照、生效校验与回滚。
+- 新增黑白主题与中英文面板切换，选择写入 `localStorage`；技术数据保持原文。
+- HTML 响应增加 CSP、`X-Content-Type-Options`、`Referrer-Policy` 安全头。
+- 新增 `tests/unit/test_web.py`（9 项）：路由、token、`APPLY` 确认、动作过滤、diff 生成、CSP、主题/语言控件与快照 ID 校验。
+
 ## [1.0.2] - 2026-11-17
 
 ### Fixed

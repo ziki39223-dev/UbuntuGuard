@@ -50,6 +50,7 @@
 | `report` | 生成合并报告 | `--format html\|json`、`--out PATH` |
 | `export ansible` | 导出 Ansible playbook | `--out PATH` |
 | `systemd install\|uninstall` | 安装/卸载 timer 与 service | `--interval 6h` |
+| `web` | 启动本地 Web 控制台 | `--host 127.0.0.1`、`--port 8080` |
 
 ### 2.3 退出码
 
@@ -291,3 +292,48 @@ Phase 9 在相同干净虚拟机上分别运行 Lynis 与 UbuntuGuard：
 - 不做监控存储与可视化（Prometheus、Netdata 已覆盖）。
 - 不做中央管控与多主机编排，仅提供 `export ansible` 可选产出。
 - 不复制 GPL 项目代码，不做 Lynis 的功能等价替代。
+
+## 16. Web 控制台
+
+启动：`ubuntuguard web --host 127.0.0.1 --port 8080`。仅使用标准库 `http.server`，不引入 Flask/FastAPI；页面为单个自包含 HTML，无外部 CDN。
+
+### 16.1 视图
+
+总览（评分、风险分布、CPU/内存/磁盘/负载）、基线审计（筛选、搜索、展开证据）、安全加固（动作选择、计划 diff、`APPLY` 确认）、异常检测、健康监控、备份恢复（verify/drill）、报告（生成并内嵌预览）。
+
+### 16.2 API
+
+| 方法 | 路径 | 说明 |
+| ---- | ---- | ---- |
+| GET | `/api/status` | doctor 输出 + hostname / kernel / OS |
+| GET | `/api/audit` | 审计 JSON |
+| GET | `/api/detect` | 检测 JSON |
+| GET | `/api/monitor` | 健康检查 JSON（不发送 Webhook） |
+| GET | `/api/backups` | 快照列表 |
+| POST | `/api/harden/plan` | `{only:[...]}`，返回计划与 unified diff |
+| POST | `/api/harden/apply` | 需 `confirm:"APPLY"`，走 CLI 的快照/校验/回滚 |
+| POST | `/api/backup/create` | 创建快照 |
+| POST | `/api/backup/verify\|drill` | 校验/演练 |
+| POST | `/api/detect/baseline` | 初始化 SHA256 文件基线 |
+| POST | `/api/report` | 生成 HTML 报告 |
+| GET | `/report/latest.html` | 最近一次报告 |
+
+### 16.3 安全模型
+
+- 默认绑定 `127.0.0.1`；绑定非回环地址时启动打印警告。控制台无登录认证，不得暴露公网。
+- POST 必须携带页面注入的随机 `X-UG-Token`，防跨站请求；token 使用 `secrets.token_urlsafe`，比较使用 `hmac.compare_digest`。
+- 动作白名单固定为 `ssh`、`sysctl`、`firewall`、`fail2ban`；不执行用户传入的任意命令。
+- 子进程统一 `argv` 列表 + `shell=False` + 超时；申请加固仍需 `APPLY` 文本确认。
+- HTML 响应附加 CSP、`X-Content-Type-Options`、`Referrer-Policy`，并禁用缓存。
+- 报告仅从固定的 state 路径读取，不接受任意文件路径。
+
+### 16.4 主题与语言
+
+- 黑白主题通过 CSS 变量实现，`data-theme` 切换，`localStorage` 持久化。
+- 中英文通过页面内字典 + DOM 文本遍历实现，`data-lang` 切换，`localStorage` 持久化；技术数据（finding 标题、证据、命令）保持原文。
+- 两套开关都不改变后端行为，仅影响渲染层。
+
+### 16.5 测试
+
+`tests/unit/test_web.py` 覆盖路由、token、`APPLY` 确认、动作过滤、diff 生成、快照 ID 校验、CSP 与主题/语言控件存在性；完整套件 174 项。
+

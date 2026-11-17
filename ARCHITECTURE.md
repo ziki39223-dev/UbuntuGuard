@@ -23,6 +23,8 @@ UbuntuGuard 是面向 Ubuntu 22.04 / 24.04 的自动化安全运维与主机健�
 ```
 cli/                    命令解析（argparse 子命令）、参数校验、退出码、输出渲染
   │
+web/                    本地 Web 控制台（标准库 http.server，固定 API，调用 CLI）
+  │
 业务层
   ├── collectors/       只读采集，产出 SystemSnapshot
   ├── security/         基线规则与加固动作
@@ -113,4 +115,5 @@ core/
 - `collectors/` 只读，禁止任何写操作与命令副作用。
 - `backup/` 只负责文件级快照，不解释业务语义。
 - 报告渲染只消费结构化结果，不在 reporting 层做判定。
+- `web/` 不直接 import 业务模块，只通过 CLI 子进程执行固定动作；默认仅绑定回环地址，POST 需要页面注入的随机 token，确认类操作额外要求输入 `APPLY`。
 - `integrations/` 只做外部数据适配（Lynis 报告、node_exporter 指标），不承载业务判定；与 GPL 项目仅通过子进程 + 文件输出交互，不复制、不链接其代码。

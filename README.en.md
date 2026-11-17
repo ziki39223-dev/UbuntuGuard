@@ -6,7 +6,7 @@
 
 **Security operations for Ubuntu hosts in one CLI**: collect → audit against a 40-rule CIS-mapped baseline → plan and apply reversible hardening → detect login and integrity anomalies → monitor health → verify backups → render a self-contained report.
 
-Targets Ubuntu 22.04 and 24.04. Python ≥ 3.10, single runtime dependency (`PyYAML`), no agent, no daemon, no database.
+Targets Ubuntu 22.04 and 24.04. Python ≥ 3.10, single runtime dependency (`PyYAML`), no agent, no daemon, no database. Current release: **v1.1.0**, including the local web console.
 
 ## Why another security tool
 
@@ -39,10 +39,10 @@ echo "deb [signed-by=/usr/share/keyrings/ubuntuguard-archive-keyring.gpg] https:
 sudo apt update && sudo apt install ubuntuguard
 
 # 2. Source or virtualenv (22.04 and 24.04)
-python3 -m venv /opt/ug && /opt/ug/bin/pip install "git+https://github.com/ziki39223-dev/UbuntuGuard.git@v1.0.2"
+python3 -m venv /opt/ug && /opt/ug/bin/pip install "git+https://github.com/ziki39223-dev/UbuntuGuard.git@v1.1.0"
 
 # 3. Offline deb from the release page (Ubuntu 24.04)
-sudo apt install ./ubuntuguard_1.0.2-1_all.deb
+sudo apt install ./ubuntuguard_1.1.0-1_all.deb
 ```
 
 The APT repository metadata is GPG-signed (`InRelease`). Build, publish and key rotation are documented in [docs/PACKAGE_SIGNING.md](docs/PACKAGE_SIGNING.md).
@@ -66,9 +66,21 @@ ubuntuguard backup restore <id> --force   # preview diff, then restore
 ubuntuguard report --format html --out report.html
 ubuntuguard export ansible --out harden.yml
 ubuntuguard systemd install               # audit + monitor timers
+ubuntuguard web                           # local web console on 127.0.0.1:8080
 ```
 
 Global flags (`--config`, `--json`, `--log-level`) go before the subcommand.
+
+## Web console
+
+```bash
+sudo ubuntuguard web --port 8080
+# open http://127.0.0.1:8080
+```
+
+Seven views share the same CLI: overview, audit, hardening, detection, monitoring, backups and report. Hardening previews a diff and requires typing `APPLY` to execute; the server still takes a snapshot, verifies the live state and rolls back on failure. The console uses only the standard library `http.server`, binds to loopback by default, and has no authentication. Do not expose it to the Internet.
+
+The top bar switches between dark/light themes and Chinese/English labels; both preferences are stored in `localStorage`. Technical data (finding titles, evidence, commands) stays in its original language.
 
 ## Configuration
 
@@ -99,7 +111,7 @@ Packages installed by apt during hardening are not removed on rollback (see `DEC
 
 ## Verification
 
-- **Unit and static checks**: 165 tests, ruff and mypy on Python 3.10 and 3.12 (GitHub Actions matrix).
+- **Unit and static checks**: 174 tests (165 core + 9 web console), ruff and mypy on Python 3.10 and 3.12 (GitHub Actions matrix).
 - **Packaging**: deb built on 24.04; installation, upgrade and purge verified; the signed APT repository is exercised in CI by installing from it.
 - **Real systemd integration**: `scripts/integration-test.sh` enables ufw, auditd, AIDE and sshd, then runs 34 assertions (audit → backup → harden → verify → detect → monitor → systemd units → restore → report). It runs on GitHub-hosted runners and on cloud hosts.
 - **Public cloud validation**: Alibaba Cloud ECS with Ubuntu 22.04.5 and 24.04.5. Both runs passed 34/34 assertions; after hardening, findings dropped from 16 to 10 and only port 22 remained reachable from the Internet.

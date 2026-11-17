@@ -1,7 +1,7 @@
 # PROJECT_STATUS
 
 当前阶段：Phase 9（已完成并发布）
-状态：v1.0.2 已发布（阿里云 ECS 公网验证通过，GitHub Release 已更新）
+状态：v1.1.0 已发布（新增 Web 控制台；阿里云 ECS 公网验证通过，GitHub Release 已更新）
 最近更新：2026-11-17
 
 ## 阶段进度
@@ -39,10 +39,11 @@
 | Phase 9 实机验证 | 建立 WSL2 Ubuntu 22.04.5（3.10）与 24.04.4（3.12）环境；双版本 164 项测试 + ruff/mypy；实机 audit/detect/monitor/backup/harden/report；SSH 与 sysctl 加固生效校验及恢复；24.04 构建 deb 并完成安装/升级/卸载；Lynis 对照（47 项）；CIS 映射写入 `docs/CIS_MAPPING.md`；修复 sshd 别名、/run/sshd、备份缺失目标、deb 依赖与权限等问题 |
 | 发布与集成 | GPG 签名 APT 仓库（`scripts/build-apt-repo.sh`、`packaging/apt/`、GitHub Pages）；CI 三个任务（双版本矩阵、apt-repo 签名安装、真实 systemd 集成）；集成测试暴露并修复 SSH drop-in 被 cloud-init 覆盖（99→00）、sshd 未运行时 reload 失败、`systemd install` 拒绝 `5min`，发布 v1.0.2 |
 | 公有云验证 | 阿里云 ECS（Ubuntu 22.04.5 与 24.04.5 双镜像）：两轮 34 项集成断言全部通过；24.04 直接安装签名仓库 deb；加固前后 findings 16→10；公网扫描仅 22 开放；R-018 关闭 |
+| Web 控制台 | `ubuntuguard web`：总览、审计、加固、检测、监控、备份、报告七个视图；标准库 `http.server`，页面注入随机 token，加固需输入 `APPLY`；支持黑白主题与中英文切换；新增 9 项单测，完整套件 174 项通过 |
 
 ## 进行中
 
-无。v1.0.2 已发布：https://github.com/ziki39223-dev/UbuntuGuard/releases/tag/v1.0.2
+无。v1.1.0 已发布：https://github.com/ziki39223-dev/UbuntuGuard/releases/tag/v1.1.0
 
 ## 后续可选事项
 

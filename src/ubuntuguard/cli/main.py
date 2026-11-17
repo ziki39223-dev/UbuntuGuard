@@ -239,6 +239,21 @@ def build_parser() -> argparse.ArgumentParser:
     )
     config_actions.add_parser("show", help="print effective configuration")
     config_actions.add_parser("validate", help="validate configuration")
+
+    web_parser = subparsers.add_parser(
+        "web", help="start the local read/write web console"
+    )
+    web_parser.add_argument(
+        "--host",
+        default="127.0.0.1",
+        help="bind address (default: 127.0.0.1)",
+    )
+    web_parser.add_argument(
+        "--port",
+        type=int,
+        default=8080,
+        help="listen port (default: 8080)",
+    )
     return parser
 
 
@@ -252,6 +267,11 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.command == "version":
         return commands.cmd_version(args.json)
+
+    if args.command == "web":
+        from ..web.server import serve
+
+        return serve(args.host, args.port, args.config)
 
     try:
         config = load_config(args.config)

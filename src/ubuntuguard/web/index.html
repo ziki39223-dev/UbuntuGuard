@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark" data-lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ug-token" content="__UG_TOKEN__">
+<title>UbuntuGuard · Web Console</title>
+<script>
+(function(){
+  try{
+    document.documentElement.dataset.theme = localStorage.getItem('ug-theme') || 'dark';
+    document.documentElement.dataset.lang = localStorage.getItem('ug-lang') || 'zh';
+  }catch(e){}
+})();
+</script>
+<style>
+:root{
+  --bg:#070C14; --panel:#0E1626; --panel2:#111C2F; --line:rgba(148,163,184,.14);
+  --text:#E6EDF7; --muted:#93A3B8; --dim:#64748B;
+  --teal:#2DD4BF; --green:#4ADE80; --amber:#FBBF24; --orange:#FB923C;
+  --red:#F87171; --blue:#60A5FA;
+  --aside-bg:rgba(8,13,22,.78);
+  --card-a:rgba(17,28,47,.88); --card-b:rgba(12,21,36,.78);
+  --score-inner:#0B1422;
+  --btn-bg:rgba(15,23,42,.72); --btn-hover:rgba(30,41,59,.72);
+  --input-bg:rgba(8,14,24,.72);
+  --pre-bg:#070D17; --pre-text:#CBD5E1;
+  --panel-soft:rgba(10,18,31,.55);
+  --chip-bg:rgba(15,23,42,.62);
+  --modal-bg:#0D1728; --toast-bg:#0F1B2D;
+  --hover:rgba(148,163,184,.035);
+}
+html[data-theme="light"]{
+  --bg:#F1F4F9; --panel:#FFFFFF; --panel2:#F8FAFC; --line:rgba(15,23,42,.13);
+  --text:#0F172A; --muted:#475569; --dim:#8A9AB0;
+  --aside-bg:rgba(255,255,255,.92);
+  --card-a:rgba(255,255,255,.98); --card-b:rgba(248,250,252,.98);
+  --score-inner:#FFFFFF;
+  --btn-bg:#FFFFFF; --btn-hover:#EEF2F7;
+  --input-bg:#FFFFFF;
+  --pre-bg:#F1F5F9; --pre-text:#0F172A;
+  --panel-soft:#F8FAFC;
+  --chip-bg:#F1F5F9;
+  --modal-bg:#FFFFFF; --toast-bg:#FFFFFF;
+  --hover:rgba(15,23,42,.045);
+}
+html[data-lang="en"] .nav .en{display:none}
+html[data-theme="light"] .card{box-shadow:0 10px 30px rgba(15,23,42,.06)}
+html[data-theme="light"] .modal{background:rgba(15,23,42,.35)}
+html[data-theme="light"] .reportimg{box-shadow:0 20px 50px rgba(15,23,42,.16)}
+html[data-theme="light"] .sev.critical{background:#FEE2E2;color:#991B1B}
+html[data-theme="light"] .sev.high{background:#FFEDD5;color:#9A3412}
+html[data-theme="light"] .sev.medium{background:#FEF3C7;color:#92400E}
+html[data-theme="light"] .sev.low{background:#DBEAFE;color:#1E40AF}
+html[data-theme="light"] .sev.ok{background:#DCFCE7;color:#166534}
+html[data-theme="light"] .status.ok{background:#DCFCE7;color:#166534}
+html[data-theme="light"] .status.critical,
+html[data-theme="light"] .status.err{background:#FEE2E2;color:#991B1B}
+html[data-theme="light"] .status.skipped{background:#E2E8F0;color:#334155}
+html[data-theme="light"] .action.checked{background:#ECFDF5}
+html[data-theme="light"] .banner{background:#FFFBEB;border-color:#FCD34D;color:#92400E}
+html[data-theme="light"] .dot.off{background:#DC2626}
+html[data-theme="light"] .chip.root{background:#DCFCE7;color:#166534;border-color:#86EFAC}
+html[data-theme="light"] .chip.warn{background:#FEF3C7;color:#92400E;border-color:#FCD34D}
+html[data-theme="light"] .btn.primary{background:#CCFBF1;color:#0F766E;border-color:#5EEAD4}
+html[data-theme="light"] .btn.primary:hover{background:#99F6E4}
+html[data-theme="light"] .modal-box .dangerbox{background:#FEF2F2;color:#991B1B;border-color:#FECACA}
+html[data-theme="light"] .toast{box-shadow:0 18px 50px rgba(15,23,42,.12)}
+html[data-theme="light"] .logo{background:linear-gradient(145deg,#CCFBF1,#F0FDFA)}
+.iconbtn{padding:7px 9px}
+.iconbtn svg{width:15px;height:15px}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+  font-family:"Microsoft YaHei","Segoe UI",system-ui,Arial,sans-serif;}
+button,input,select{font:inherit}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(900px 500px at 88% -10%, rgba(45,212,191,.10), transparent 60%),
+    radial-gradient(700px 420px at -5% 110%, rgba(96,165,250,.08), transparent 60%);}
+.app{position:relative;z-index:1;display:grid;grid-template-columns:238px 1fr;min-height:100vh}
+aside{position:sticky;top:0;height:100vh;padding:24px 16px 18px;
+  border-right:1px solid var(--line);background:var(--aside-bg);backdrop-filter:blur(10px);
+  display:flex;flex-direction:column;gap:24px}
+.brand{display:flex;align-items:center;gap:11px;padding:2px 8px}
+.logo{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  background:linear-gradient(145deg,rgba(45,212,191,.22),rgba(45,212,191,.05));
+  border:1px solid rgba(45,212,191,.35);color:var(--teal)}
+.brand b{display:block;font-size:15px;letter-spacing:.2px}
+.brand small{display:block;font-size:10px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;margin-top:2px}
+nav{display:flex;flex-direction:column;gap:4px}
+.nav{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:0;border-radius:9px;
+  background:transparent;color:var(--muted);cursor:pointer;text-align:left;font-size:13px;
+  transition:background .15s,color .15s}
+.nav svg{width:17px;height:17px;flex:0 0 17px;opacity:.85}
+.nav:hover{background:rgba(148,163,184,.07);color:var(--text)}
+.nav.active{background:rgba(45,212,191,.10);color:var(--teal)}
+.nav .en{margin-left:auto;font-family:Consolas,monospace;font-size:9px;color:var(--dim);letter-spacing:.08em}
+.side-foot{margin-top:auto;padding:12px 10px 0;border-top:1px solid var(--line);
+  font-size:11px;color:var(--dim);display:flex;align-items:center;justify-content:space-between}
+.conn{width:7px;height:7px;border-radius:50%;background:var(--dim);box-shadow:0 0 0 3px rgba(148,163,184,.08)}
+.conn.ok{background:var(--green);box-shadow:0 0 0 3px rgba(74,222,128,.12)}
+.conn.err{background:var(--red);box-shadow:0 0 0 3px rgba(248,113,113,.12)}
+
+main{padding:26px 34px 60px;max-width:1480px;width:100%}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:22px}
+.top h1{margin:0;font-size:27px;letter-spacing:.2px}
+.top p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.hostbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);
+  border:1px solid var(--line);background:var(--chip-bg);padding:6px 10px;border-radius:999px}
+.chip.root{border-color:rgba(74,222,128,.28);color:#bbf7d0;background:rgba(74,222,128,.08)}
+.chip.warn{border-color:rgba(251,191,36,.28);color:#fde68a;background:rgba(251,191,36,.08)}
+.mono{font-family:Consolas,"Courier New",monospace}
+.banner{display:none;margin:0 0 18px;padding:11px 14px;border-radius:10px;font-size:12px;
+  border:1px solid rgba(251,191,36,.28);background:rgba(251,191,36,.07);color:#fde68a}
+.banner.show{display:block}
+
+.card{background:linear-gradient(160deg,var(--card-a),var(--card-b));
+  border:1px solid var(--line);border-radius:15px;box-shadow:0 18px 50px rgba(0,0,0,.22)}
+.pad{padding:18px 20px}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g2{grid-template-columns:1fr 1fr}
+.section{margin-top:16px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 10px}
+.section-head h2{margin:0;font-size:15px;letter-spacing:.3px}
+.section-head p{margin:0;font-size:11px;color:var(--dim)}
+.muted{color:var(--muted)} .dim{color:var(--dim)}
+.teal{color:var(--teal)} .green{color:var(--green)} .amber{color:var(--amber)}
+.red{color:var(--red)} .blue{color:var(--blue)}
+
+.hero{display:grid;grid-template-columns:210px 1fr;gap:24px;align-items:center;padding:24px 26px}
+.score{width:168px;height:168px;border-radius:50%;position:relative;display:grid;place-items:center;
+  background:conic-gradient(var(--c,#2DD4BF) calc(var(--p,0)*1%), rgba(148,163,184,.12) 0)}
+.score::before{content:"";position:absolute;inset:11px;border-radius:50%;background:var(--score-inner);border:1px solid rgba(148,163,184,.08)}
+.score>div{position:relative;text-align:center}
+.score b{font-family:Consolas,monospace;font-size:46px;line-height:1}
+.score span{font-family:Consolas,monospace;font-size:14px;color:var(--dim)}
+.score em{display:block;font-style:normal;font-size:10px;letter-spacing:.16em;color:var(--muted);margin-top:7px}
+.hero-copy .k{font-size:10px;letter-spacing:.18em;color:var(--teal);text-transform:uppercase}
+.hero-copy h2{margin:8px 0 6px;font-size:24px;line-height:1.3}
+.hero-copy p{margin:0;color:var(--muted);font-size:13px;line-height:1.65;max-width:720px}
+.hero-copy .chips{margin-top:14px;display:flex;gap:7px;flex-wrap:wrap}
+
+.metric{padding:15px 16px}
+.metric .k{font-size:10px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
+.metric .v{font-family:Consolas,monospace;font-size:27px;margin:7px 0 2px}
+.metric .v small{font-size:12px;color:var(--dim)}
+.metric .sub{font-size:10px;color:var(--dim)}
+.bar{height:5px;border-radius:99px;background:rgba(148,163,184,.12);margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--teal)}
+
+.sevbar{display:grid;grid-template-columns:62px 1fr 34px;gap:9px;align-items:center;margin:9px 0;font-size:11px}
+.sevbar .track{height:7px;border-radius:99px;background:rgba(148,163,184,.10);overflow:hidden}
+.sevbar .track i{display:block;height:100%;border-radius:99px}
+
+.kv{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed rgba(148,163,184,.12);font-size:12px}
+.kv:last-child{border:0}
+.kv span:first-child{color:var(--muted)}
+.kv span:last-child{font-family:Consolas,monospace;color:var(--text);text-align:right}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:9px;padding:8px 13px;
+  border:1px solid var(--line);background:var(--btn-bg);color:var(--text);cursor:pointer;font-size:12px;
+  transition:border-color .15s,background .15s,transform .05s}
+.btn:hover{border-color:rgba(148,163,184,.32);background:var(--btn-hover)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{border-color:rgba(45,212,191,.38);background:rgba(45,212,191,.12);color:#a7f3e8}
+.btn.primary:hover{background:rgba(45,212,191,.18)}
+.btn.danger{border-color:rgba(248,113,113,.38);background:rgba(248,113,113,.10);color:#fecaca}
+.btn.ghost{background:transparent}
+.btn svg{width:14px;height:14px}
+.spin{width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.25);
+  border-top-color:#fff;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.input,select{border:1px solid var(--line);background:var(--input-bg);color:var(--text);
+  border-radius:8px;padding:8px 10px;font-size:12px;outline:none}
+.input:focus,select:focus{border-color:rgba(45,212,191,.45)}
+.input::placeholder{color:var(--dim)}
+.search{min-width:220px;flex:1}
+
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:var(--dim);font-weight:500;font-size:10px;letter-spacing:.08em;
+  text-transform:uppercase;padding:9px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid rgba(148,163,184,.09);vertical-align:top}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--hover)}
+.sev{display:inline-block;min-width:58px;text-align:center;font-family:Consolas,monospace;
+  font-size:9px;letter-spacing:.08em;padding:3px 6px;border-radius:5px;text-transform:uppercase}
+.sev.critical{background:rgba(248,113,113,.14);color:#fca5a5}
+.sev.high{background:rgba(251,146,60,.14);color:#fdba74}
+.sev.medium{background:rgba(251,191,36,.13);color:#fde68a}
+.sev.low{background:rgba(96,165,250,.13);color:#bfdbfe}
+.sev.ok{background:rgba(74,222,128,.13);color:#bbf7d0}
+.status{font-family:Consolas,monospace;font-size:10px;padding:3px 7px;border-radius:5px}
+.status.ok{background:rgba(74,222,128,.12);color:#86efac}
+.status.critical,.status.err{background:rgba(248,113,113,.12);color:#fca5a5}
+.status.skipped{background:rgba(148,163,184,.12);color:#cbd5e1}
+
+.finding{border:1px solid var(--line);border-radius:11px;background:var(--panel-soft);margin-bottom:8px;overflow:hidden}
+.finding summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:68px 78px 1fr 18px;
+  gap:10px;align-items:center;padding:11px 14px;font-size:12px}
+.finding summary::-webkit-details-marker{display:none}
+.finding summary:hover{background:rgba(148,163,184,.04)}
+.finding .fid{font-family:Consolas,monospace;font-size:11px;color:var(--muted)}
+.finding .arrow{color:var(--dim);transition:transform .2s}
+.finding[open] .arrow{transform:rotate(90deg)}
+.fbody{padding:0 14px 14px;border-top:1px solid rgba(148,163,184,.09)}
+.fbody label{display:block;font-size:9px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;margin:12px 0 4px}
+.fbody pre,.fbody p{margin:0;font-size:11px;line-height:1.6;color:var(--pre-text);white-space:pre-wrap;word-break:break-word}
+pre{font-family:Consolas,"Courier New",monospace;font-size:11px;line-height:1.65;
+  background:var(--pre-bg);border:1px solid var(--line);border-radius:9px;padding:12px;
+  max-height:420px;overflow:auto;white-space:pre;color:var(--pre-text)}
+pre.wrap{white-space:pre-wrap;word-break:break-word}
+
+.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.action{display:flex;gap:10px;align-items:flex-start;padding:13px 14px;border:1px solid var(--line);
+  border-radius:11px;background:var(--panel-soft);cursor:pointer;font-size:12px}
+.action:hover{border-color:rgba(45,212,191,.26)}
+.action input{margin-top:2px;accent-color:#2DD4BF}
+.action b{display:block;margin-bottom:3px}
+.action small{display:block;color:var(--dim);line-height:1.5}
+.action.checked{border-color:rgba(45,212,191,.36);background:rgba(45,212,191,.06)}
+
+.gauge{padding:14px 16px}
+.gauge .head{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.gauge .head b{font-family:Consolas,monospace;color:var(--text);font-size:17px}
+.gauge .bar{height:6px;margin-top:9px}
+.gauge .foot{font-size:10px;color:var(--dim);margin-top:6px}
+
+.empty{padding:36px 20px;text-align:center;color:var(--dim);font-size:12px}
+.rowline{display:flex;align-items:center;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--dim)}
+.dot.on{background:var(--green)} .dot.off{background:var(--red)}
+
+.modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;background:rgba(2,6,12,.72);backdrop-filter:blur(5px)}
+.modal.open{display:grid}
+.modal-box{width:min(520px,calc(100vw - 40px));background:var(--modal-bg);border:1px solid rgba(148,163,184,.22);
+  border-radius:16px;padding:22px;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.modal-box h3{margin:0 0 8px;font-size:18px}
+.modal-box p{margin:0 0 14px;font-size:12px;line-height:1.7;color:var(--muted)}
+.modal-box .dangerbox{border:1px solid rgba(248,113,113,.25);background:rgba(248,113,113,.07);
+  border-radius:9px;padding:10px 12px;font-size:11px;color:#fecaca;margin-bottom:14px;line-height:1.6}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+#toast{position:fixed;right:24px;bottom:22px;z-index:60;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--toast-bg);border:1px solid var(--line);border-left:3px solid var(--teal);
+  padding:11px 14px;border-radius:9px;font-size:12px;color:var(--text);box-shadow:0 18px 50px rgba(0,0,0,.4);
+  animation:pop .18s ease-out}
+.toast.err{border-left-color:var(--red)}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.skeleton{height:14px;border-radius:6px;background:linear-gradient(90deg,rgba(148,163,184,.08),rgba(148,163,184,.16),rgba(148,163,184,.08));
+  background-size:200% 100%;animation:shim 1.2s infinite}
+@keyframes shim{to{background-position:-200% 0}}
+
+@media(max-width:1100px){
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .actions{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:820px){
+  .app{grid-template-columns:1fr}
+  aside{position:relative;height:auto;flex-direction:row;align-items:center;overflow:auto}
+  nav{flex-direction:row}
+  .nav .en,.side-foot{display:none}
+  .brand small{display:none}
+  main{padding:20px}
+  .hero{grid-template-columns:1fr}
+  .g4,.g3,.g2{grid-template-columns:1fr}
+  .top{flex-direction:column}
+  .hostbar{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path d="M12 3 5 6v5c0 4.6 3 8.4 7 10 4-1.6 7-5.4 7-10V6l-7-3Z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+      </div>
+      <div><b>UbuntuGuard</b><small>web console</small></div>
+    </div>
+    <nav id="nav">
+      <button class="nav active" data-view="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="7" rx="1.4"/><rect x="14" y="3" width="7" height="7" rx="1.4"/><rect x="3" y="14" width="7" height="7" rx="1.4"/><rect x="14" y="14" width="7" height="7" rx="1.4"/></svg>
+        <span>总览</span><span class="en">OVERVIEW</span>
+      </button>
+      <button class="nav" data-view="audit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 5h10M9 12h10M9 19h10"/><path d="m3 5 1.4 1.4L7 3.8M3 12l1.4 1.4L7 10.8M3 19l1.4 1.4L7 17.8"/></svg>
+        <span>基线审计</span><span class="en">AUDIT</span>
+      </button>
+      <button class="nav" data-view="harden">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3 5 6v5c0 4.6 3 8.4 7 10 4-1.6 7-5.4 7-10V6l-7-3Z"/><path d="M9 11.5h6M12 8.5v6"/></svg>
+        <span>安全加固</span><span class="en">HARDEN</span>
+      </button>
+      <button class="nav" data-view="detect">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+        <span>异常检测</span><span class="en">DETECT</span>
+      </button>
+      <button class="nav" data-view="monitor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
+        <span>健康监控</span><span class="en">MONITOR</span>
+      </button>
+      <button class="nav" data-view="backups">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16v13H4z"/><path d="M3 4h18v3H3zM9 12h6"/></svg>
+        <span>备份恢复</span><span class="en">BACKUPS</span>
+      </button>
+      <button class="nav" data-view="report">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>
+        <span>报告</span><span class="en">REPORT</span>
+      </button>
+    </nav>
+    <div class="side-foot"><span id="ver">v1.1.0</span><span class="conn" id="conn" title="API status"></span></div>
+  </aside>
+
+  <main>
+    <div class="top">
+      <div>
+        <h1 id="pageTitle">总览</h1>
+        <p id="pageSub">主机安全态势与快速操作</p>
+      </div>
+      <div class="hostbar">
+        <span class="chip mono" id="hostName">...</span>
+        <span class="chip" id="osName">...</span>
+        <span class="chip root" id="rootBadge">root</span>
+        <button class="btn ghost iconbtn" id="themeBtn" title="切换为浅色"></button>
+        <button class="btn ghost iconbtn" id="langBtn" title="切换语言">EN</button>
+        <button class="btn ghost" id="refreshBtn">刷新</button>
+      </div>
+    </div>
+    <div class="banner" id="rootBanner">当前进程不是 root，加固、备份创建等操作会被拒绝。请用 root 启动 Web 控制台。</div>
+    <div id="view"></div>
+  </main>
+</div>
+
+<div class="modal" id="modal"><div class="modal-box" id="modalBox"></div></div>
+<div id="toast"></div>
+
+<script>
+const TOKEN = document.querySelector('meta[name="ug-token"]').content;
+let lang = document.documentElement.dataset.lang || 'zh';
+let theme = document.documentElement.dataset.theme || 'dark';
+
+const EN = {
+  '总览':'Overview','基线审计':'Audit','安全加固':'Hardening','异常检测':'Detection',
+  '健康监控':'Monitoring','备份恢复':'Backups','报告':'Report',
+  '主机安全态势与快速操作':'Host security posture and quick actions',
+  '40 条规则，证据驱动':'40 rules, evidence-driven',
+  '预览、快照、执行、校验、回滚':'Preview, snapshot, apply, verify, rollback',
+  '登录、完整性、进程与文件基线':'Login, integrity, processes and file baseline',
+  'CPU、内存、磁盘、负载、服务':'CPU, memory, disk, load, services',
+  '快照、校验、演练与恢复':'Snapshots, verify, drill, restore',
+  '合并审计、检测与健康检查':'Audit, detection and health checks',
+  '审计 + 检测 + 健康检查，自包含 HTML，离线可看。':'Audit + Detection + Health checks, self-contained HTML, offline.',
+  'manifest + SHA256 · verify 校验 · drill 临时目录演练':'manifest + SHA256 · verify · drill to a temp directory',
+  '刷新':'Refresh','刷新中':'Refreshing','重新审计':'Run audit','重新检测':'Run detection',
+  '重新采样':'Sample again','生成计划':'Generate plan','生成加固计划':'Generate hardening plan',
+  '生成报告':'Generate report','应用加固':'Apply hardening','执行加固':'Apply',
+  '创建快照':'Create snapshot','创建中':'Creating','加载中':'Loading','执行中':'Running',
+  '生成中':'Generating','审计中':'Auditing','检测中':'Detecting','采样中':'Sampling',
+  '取消':'Cancel','确认':'Confirm','继续':'Continue','初始化':'Initialize',
+  '初始化文件基线':'Initialize file baseline','新窗口打开':'Open in new tab',
+  '已生成':'Generated','优先级':'Priority',
+  '优先处理':'Priority findings','前 5 条 findings':'Top 5 findings',
+  '风险分布':'Risk breakdown','按严重度':'By severity','评估项':'Evaluated',
+  'SSH 服务':'SSH service',
+  '主机与依赖':'Host & dependencies','风险项较多，建议立即处理':'Many risks found; act now',
+  '存在中高风险项，建议加固':'Medium/high risks found; hardening recommended',
+  '基线状态良好，继续保持':'Baseline looks good; keep it up',
+  '当前没有可评估的检查项':'No evaluable checks right now',
+  '没有发现项':'No findings','跳过项':'Skipped','权限或数据不可用':'Permission or data unavailable',
+  '全部严重度':'All severities','搜索 ID / 标题 / 分类':'Search ID / title / category',
+  '选择动作':'Select actions','只写 drop-in，不修改主配置':'Drop-in only; main config untouched',
+  '禁用密码登录、root 仅密钥、MaxAuthTries 4':'Disable password login, key-only root, MaxAuthTries 4',
+  '内核信息保护':'kernel information protection',
+  '默认拒绝入站，先放行 22 再启用':'Default deny inbound; allow 22 before enabling',
+  '安装并写入 SSH jail 配置':'Install and write SSH jail config',
+  '需要输入 APPLY 二次确认':'Type APPLY to confirm','非 root 无法应用':'Non-root cannot apply',
+  '计划与结果':'Plan & result','真实执行输出':'Real execution output',
+  '先生成计划，预览 diff 后再应用。':'Generate a plan and review the diff before applying.',
+  '没有需要变更的动作。':'No changes needed.','计划已生成':'Plan generated',
+  '至少选择一个动作':'Select at least one action','需要 root 权限':'Root required',
+  '检测结果':'Detection results','服务':'Services','磁盘':'Disk','挂载点':'Mount point',
+  '没有配置服务检查':'No service checks configured','没有磁盘数据':'No disk data',
+  '检查项':'Checks','阈值判定':'Threshold checks','告警':'Alerts','阈值命中':'Threshold hits',
+  '配置快照':'Configuration snapshots','快照列表':'Snapshots','创建结果':'Create result',
+  '还没有快照，点击“创建快照”。':'No snapshots yet. Click “Create snapshot”.',
+  '合并报告':'Combined report','已刷新':'Refreshed','审计完成':'Audit complete',
+  '检测完成':'Detection complete','采样完成':'Sample complete','快照已创建':'Snapshot created',
+  '报告已生成':'Report generated','基线已初始化':'Baseline initialized','验证完成':'Verification complete',
+  '回滚失败':'Rollback failed','已回滚':'Rolled back','成功':'success',
+  '当前进程不是 root，加固、备份创建等操作会被拒绝。请用 root 启动 Web 控制台。':
+    'This process is not root; hardening and backup creation will be rejected. Start the web console as root.',
+  '将把当前关键文件的 SHA256 写入基线。之后新增、修改或缺失都会被检测出来。':
+    'Writes SHA256 of critical files to the baseline. New, modified or missing files will be detected.',
+  '点击“生成报告”，会运行审计、检测和健康检查。':
+    'Click “Generate report” to run audit, detection and health checks.',
+  'UFW 会默认拒绝入站。请确认 Web 端口和 SSH 已在 allow_ports，并保留带外通道，否则可能无法再访问控制台。':
+    'UFW defaults to deny inbound. Confirm the web port and SSH are in allow_ports, and keep an out-of-band channel, or the console may become unreachable.',
+  'SSH 配置错误可能导致远程连接中断，请确认已有可用密钥和带外通道。':
+    'A config error can interrupt remote access; confirm key access and an out-of-band channel.',
+  '切换为浅色':'Switch to light','切换为深色':'Switch to dark','切换语言':'Switch language'
+};
+
+const FRAGMENTS = [
+  ['加固完成，退出码 ','Hardening finished, exit code '],
+  ['将对 ','Will run '],
+  [' 执行变更。系统会先写快照，失败自动回滚。',' will be changed. A snapshot is taken first; failures roll back automatically.'],
+  ['，并保留带外通道，否则可能无法再访问控制台。',', and keep an out-of-band channel, or the console may become unreachable.'],
+  ['会默认拒绝入站。请确认 Web 端口和 SSH 已在 allow_ports','defaults to deny inbound. Confirm the web port and SSH are in allow_ports'],
+  ['，会运行审计、检测和健康检查。',', runs audit, detection and health checks.'],
+  ['，自包含 HTML，离线可看。',', self-contained HTML, offline.'],
+  ['条规则，证据驱动','rules, evidence-driven'],
+  ['，建议立即处理','; act now'],
+  ['，建议加固','; hardening recommended'],
+  ['，继续保持','; keep it up'],
+  ['还没有快照，点击','No snapshots yet. Click '],
+  ['创建快照”。','Create snapshot”.'],
+  ['前 5 条 findings','Top 5 findings'],
+  ['全部动作','all actions'],
+  ['阈值 ','threshold '],
+  ['内核信息保护','kernel information protection'],
+  ['健康检查','health checks'],
+  ['运行 ','uptime '],
+  ['审计 ','Audit '],
+  ['检测 ','Detection '],
+  ['输入 ','Type '],
+  [' 继续',' to continue'],
+  ['继续','continue'],
+  ['点击','Click '],
+  [' 完成',' complete'],
+  ['完成','completed'],
+  ['、',', ']
+].sort((a,b) => b[0].length - a[0].length);
+
+function tr(text){
+  if(lang !== 'en') return text;
+  const s = String(text ?? '');
+  const m = s.match(/^(\s*)([\s\S]*?)(\s*)$/);
+  if(!m) return s;
+  let core = m[2];
+  if(EN[core]) return m[1] + EN[core] + m[3];
+  for(const [zh, en] of FRAGMENTS){
+    if(core.includes(zh)) core = core.split(zh).join(en);
+  }
+  return m[1] + core + m[3];
+}
+
+function applyI18n(root = document.body){
+  if(!root) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node){
+      const p = node.parentElement;
+      if(!p) return NodeFilter.FILTER_REJECT;
+      if(['SCRIPT','STYLE','NOSCRIPT'].includes(p.tagName)) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const nodes = [];
+  while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    if(node.__zh === undefined) node.__zh = node.nodeValue;
+    node.nodeValue = lang === 'en' ? tr(node.__zh) : node.__zh;
+  });
+  root.querySelectorAll('[placeholder]').forEach(el => {
+    if(el.__zhPlaceholder === undefined) el.__zhPlaceholder = el.getAttribute('placeholder');
+    el.setAttribute('placeholder', lang === 'en' ? tr(el.__zhPlaceholder) : el.__zhPlaceholder);
+  });
+  root.querySelectorAll('[title]').forEach(el => {
+    if(el.__zhTitle === undefined) el.__zhTitle = el.getAttribute('title');
+    el.setAttribute('title', lang === 'en' ? tr(el.__zhTitle) : el.__zhTitle);
+  });
+}
+
+const SUN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>';
+const MOON_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"/></svg>';
+
+function applyTheme(next){
+  theme = next === 'light' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = theme;
+  localStorage.setItem('ug-theme', theme);
+  const btn = document.getElementById('themeBtn');
+  if(btn){
+    btn.innerHTML = theme === 'dark' ? SUN_ICON : MOON_ICON;
+    btn.title = theme === 'dark' ? '切换为浅色' : '切换为深色';
+    btn.__zhTitle = btn.title;
+  }
+  applyI18n(document.body);
+}
+
+function setLang(next, rerender = true){
+  lang = next === 'en' ? 'en' : 'zh';
+  document.documentElement.dataset.lang = lang;
+  document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+  localStorage.setItem('ug-lang', lang);
+  const btn = document.getElementById('langBtn');
+  if(btn) btn.textContent = lang === 'en' ? '中' : 'EN';
+  applyI18n(document.body);
+  if(rerender) render();
+}
+
+
+const ICON = {
+  refresh:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 11a8 8 0 1 0-2.3 6.7M20 5v6h-6"/></svg>',
+  play:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m8 5 11 7-11 7V5Z"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 5 6v5c0 4.6 3 8.4 7 10 4-1.6 7-5.4 7-10V6l-7-3Z"/></svg>',
+  scan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+};
+
+const TITLES = {
+  overview:['总览','主机安全态势与快速操作'],
+  audit:['基线审计','40 条规则，证据驱动'],
+  harden:['安全加固','预览、快照、执行、校验、回滚'],
+  detect:['异常检测','登录、完整性、进程与文件基线'],
+  monitor:['健康监控','CPU、内存、磁盘、负载、服务'],
+  backups:['备份恢复','快照、校验、演练与恢复'],
+  report:['报告','合并审计、检测与健康检查']
+};
+
+const state = {
+  status:null, audit:null, monitor:null, detect:null, backups:null,
+  plan:null, hardenResult:null, reportUrl:null, view:'overview',
+  auditFilter:{sev:'all', q:''},
+  hardenOnly:['ssh','sysctl'],
+  busy:false
+};
+
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = (v, d='—') => (v === null || v === undefined || Number.isNaN(Number(v))) ? d : Number(v);
+const pct = v => v === null || v === undefined ? '—' : `${Number(v).toFixed(1)}%`;
+
+async function api(path, options={}){
+  const headers = Object.assign({'X-UG-Token':TOKEN}, options.headers || {});
+  if(options.body) headers['Content-Type'] = 'application/json';
+  const res = await fetch(path, Object.assign({cache:'no-store'}, options, {headers}));
+  const data = await res.json().catch(() => ({ok:false,error:'invalid JSON response'}));
+  if(!res.ok || data.ok === false){
+    throw new Error(data.error || data.stderr || `HTTP ${res.status}`);
+  }
+  return data;
+}
+
+function toast(msg, type='ok'){
+  const el = document.createElement('div');
+  el.className = 'toast' + (type === 'err' ? ' err' : '');
+  el.textContent = tr(msg);
+  $('#toast').appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; }, 3200);
+  setTimeout(() => el.remove(), 3600);
+}
+
+function setConn(ok){
+  const el = $('#conn');
+  el.className = 'conn ' + (ok ? 'ok' : 'err');
+}
+
+function setBusy(btn, label='运行中'){
+  if(!btn) return () => {};
+  const old = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spin"></span>${esc(tr(label))}`;
+  return () => { btn.disabled = false; btn.innerHTML = old; };
+}
+
+function go(view){
+  state.view = view;
+  document.querySelectorAll('.nav').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+  $('#pageTitle').textContent = TITLES[view][0];
+  $('#pageSub').textContent = TITLES[view][1];
+  render();
+  if(view === 'overview' && !state.audit) loadOverview();
+  if(view === 'audit' && !state.audit) loadAudit();
+  if(view === 'detect' && !state.detect) loadDetect();
+  if(view === 'monitor' && !state.monitor) loadMonitor();
+  if(view === 'backups' && !state.backups) loadBackups();
+}
+
+function render(){
+  const v = state.view;
+  if(v === 'overview') renderOverview();
+  if(v === 'audit') renderAudit();
+  if(v === 'harden') renderHarden();
+  if(v === 'detect') renderDetect();
+  if(v === 'monitor') renderMonitor();
+  if(v === 'backups') renderBackups();
+  if(v === 'report') renderReport();
+  applyI18n(document.body);
+}
+
+async function loadStatus(){
+  try{
+    const r = await api('/api/status');
+    state.status = r.data;
+    const p = r.data.platform || {};
+    $('#ver').textContent = 'v' + (r.data.version || '1.1.0');
+    $('#hostName').textContent = r.data.hostname || 'unknown';
+    $('#osName').textContent = (r.data.os_pretty || (`${p.os?.id||''} ${p.os?.version||''}`)).trim();
+    const root = !!p.is_root;
+    $('#rootBadge').textContent = root ? 'root' : 'non-root';
+    $('#rootBadge').classList.toggle('warn', !root);
+    $('#rootBanner').classList.toggle('show', !root);
+    setConn(true);
+  }catch(e){ setConn(false); toast(e.message, 'err'); }
+}
+
+async function loadOverview(){
+  render();
+  try{
+    const [a, m] = await Promise.all([api('/api/audit'), api('/api/monitor')]);
+    state.audit = a.data; state.monitor = m.data;
+  }catch(e){ toast(e.message, 'err'); }
+  render();
+}
+
+async function loadAudit(){
+  render();
+  try{ const r = await api('/api/audit'); state.audit = r.data; }
+  catch(e){ toast(e.message, 'err'); }
+  render();
+}
+
+async function loadDetect(){
+  render();
+  try{ const r = await api('/api/detect'); state.detect = r.data; }
+  catch(e){ toast(e.message, 'err'); }
+  render();
+}
+
+async function loadMonitor(){
+  render();
+  try{ const r = await api('/api/monitor'); state.monitor = r.data; }
+  catch(e){ toast(e.message, 'err'); }
+  render();
+}
+
+async function loadBackups(){
+  render();
+  try{ const r = await api('/api/backups'); state.backups = r.data; }
+  catch(e){ toast(e.message, 'err'); }
+  render();
+}
+
+function sevBadge(s){ return `<span class="sev ${esc(s)}">${esc(s)}</span>`; }
+function statusBadge(s){ return `<span class="status ${esc(s)}">${esc(s)}</span>`; }
+function evidenceText(e){
+  try{ return JSON.stringify(e, null, 2); }catch{ return String(e); }
+}
+
+function findingList(findings, limit=0){
+  const list = limit ? findings.slice(0, limit) : findings;
+  if(!list.length) return `<div class="empty">没有发现项</div>`;
+  return list.map(f => `
+    <details class="finding">
+      <summary>
+        ${sevBadge(f.severity)}
+        <span class="fid">${esc(f.id)}</span>
+        <span>${esc(f.title)}</span>
+        <span class="arrow">›</span>
+      </summary>
+      <div class="fbody">
+        <label>Evidence</label><pre class="wrap">${esc(evidenceText(f.evidence))}</pre>
+        <label>Remediation</label><p>${esc(f.remediation)}</p>
+        ${(f.references && f.references.length) ? `<label>References</label><p>${esc(f.references.join(' · '))}</p>` : ''}
+      </div>
+    </details>`).join('');
+}
+
+function metricCard(label, value, threshold, suffix='%'){
+  const v = value === null || value === undefined ? null : Number(value);
+  const width = v === null ? 0 : Math.min(100, v);
+  const color = v === null ? 'var(--dim)' : (threshold && v > threshold ? 'var(--red)' : 'var(--teal)');
+  return `<div class="card metric">
+    <div class="k">${esc(label)}</div>
+    <div class="v" style="color:${color}">${v === null ? '—' : (suffix === '%' ? v.toFixed(1) : v.toFixed(2))}${v === null ? '' : `<small>${suffix}</small>`}</div>
+    <div class="sub">${threshold ? `阈值 ${threshold}${suffix}` : '实时采样'}</div>
+    <div class="bar"><i style="width:${width}%;background:${color}"></i></div>
+  </div>`;
+}
+
+function renderOverview(){
+  const a = state.audit, m = state.monitor;
+  if(!a){
+    $('#view').innerHTML = `
+      <div class="card pad"><div class="skeleton" style="width:30%;height:24px"></div>
+      <div style="height:16px"></div><div class="skeleton" style="width:70%"></div></div>
+      <div class="grid g4 section">${'<div class="card pad"><div class="skeleton" style="height:54px"></div></div>'.repeat(4)}</div>`;
+    return;
+  }
+  const s = a.summary, h = a.host;
+  const score = s.evaluated ? s.score : null;
+  const grade = s.evaluated ? s.grade : 'N/A';
+  const color = score === null ? 'var(--dim)' : score >= 75 ? 'var(--green)' : score >= 40 ? 'var(--amber)' : 'var(--red)';
+  const sev = s.by_severity || {};
+  const maxSev = Math.max(1, ...Object.values(sev).map(Number));
+  const mtr = (m && m.metrics) || {};
+  const disks = mtr.disk_usage || [];
+  const disk = disks[0] || {};
+  const service = (mtr.services || []).find(x => x.name === 'ssh') || {};
+  const missing = (state.status?.platform?.missing_dependencies) || [];
+  const uptime = h.uptime_seconds ? (h.uptime_seconds/3600).toFixed(1) + ' h' : '—';
+
+  $('#view').innerHTML = `
+    <div class="card hero">
+      <div class="score" style="--p:${score ?? 0};--c:${color}">
+        <div><b style="color:${color}">${score === null ? 'n/a' : score}</b><span>/100</span><em>GRADE ${esc(grade)}</em></div>
+      </div>
+      <div class="hero-copy">
+        <div class="k">Security posture</div>
+        <h2>${score === null ? '当前没有可评估的检查项' : (score >= 75 ? '基线状态良好，继续保持' : score >= 40 ? '存在中高风险项，建议加固' : '风险项较多，建议立即处理')}</h2>
+        <p>${esc(h.hostname)} · ${esc(h.os)} · kernel ${esc(h.kernel)} · 运行 ${esc(uptime)}</p>
+        <div class="chips">
+          <span class="chip">${s.total} findings</span>
+          <span class="chip">${s.passed} passed</span>
+          <span class="chip">${s.skipped} skipped</span>
+          <span class="chip">${m?.metrics_source ? 'metrics: ' + esc(m.metrics_source) : 'metrics: —'}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g4 section">
+      ${metricCard('CPU', mtr.cpu_percent, 85)}
+      ${metricCard('Memory', mtr.memory_percent, 85)}
+      ${metricCard('Disk ' + (disk.mount || '/'), disk.used_percent, 85)}
+      ${metricCard('Load / core', mtr.load_per_core, 1.5, '')}
+    </div>
+
+    <div class="grid g2 section">
+      <div class="card pad">
+        <div class="section-head" style="margin:0 0 10px"><h2>风险分布</h2><p>按严重度</p></div>
+        ${['critical','high','medium','low'].map(k => {
+          const count = Number(sev[k] || 0);
+          const c = k==='critical'?'var(--red)':k==='high'?'var(--orange)':k==='medium'?'var(--amber)':'var(--blue)';
+          return `<div class="sevbar"><span class="muted">${k}</span><div class="track"><i style="width:${count/maxSev*100}%;background:${c}"></i></div><b class="mono">${count}</b></div>`;
+        }).join('')}
+        <div class="kv" style="margin-top:8px"><span>评估项</span><span>${s.evaluated} / 40</span></div>
+        <div class="kv"><span>SSH 服务</span><span>${service.active === true ? 'active' : service.active === false ? 'inactive' : '—'}</span></div>
+      </div>
+      <div class="card pad">
+        <div class="section-head" style="margin:0 0 10px"><h2>主机与依赖</h2><p>doctor</p></div>
+        <div class="kv"><span>Host</span><span>${esc(h.hostname)}</span></div>
+        <div class="kv"><span>OS</span><span>${esc(h.os)}</span></div>
+        <div class="kv"><span>Kernel</span><span>${esc(h.kernel)}</span></div>
+        <div class="kv"><span>Config</span><span>${esc(state.status?.config?.source || 'defaults')}</span></div>
+        <div class="kv"><span>Dependencies</span><span>${missing.length ? 'missing: ' + esc(missing.join(', ')) : 'all ok'}</span></div>
+      </div>
+    </div>
+
+    <div class="section-head"><h2>优先处理</h2><p>前 5 条 findings</p></div>
+    ${findingList(a.findings || [], 5)}
+
+    <div class="toolbar section">
+      <button class="btn primary" id="ovAudit">${ICON.scan} 重新审计</button>
+      <button class="btn" id="ovHarden">${ICON.shield} 生成加固计划</button>
+      <button class="btn" id="ovReport">${ICON.play} 生成报告</button>
+    </div>`;
+
+  $('#ovAudit')?.addEventListener('click', e => act(e.currentTarget, '审计中', async () => {
+    const [r, m2] = await Promise.all([api('/api/audit'), api('/api/monitor')]);
+    state.audit = r.data; state.monitor = m2.data; render(); toast('审计完成');
+  }));
+  $('#ovHarden')?.addEventListener('click', () => go('harden'));
+  $('#ovReport')?.addEventListener('click', () => go('report'));
+}
+
+function renderAudit(){
+  const a = state.audit;
+  if(!a){ $('#view').innerHTML = `<div class="card pad"><div class="skeleton" style="width:40%;height:22px"></div></div>`; return; }
+  const s = a.summary;
+  const sev = state.auditFilter.sev;
+  $('#view').innerHTML = `
+    <div class="card pad">
+      <div class="rowline" style="justify-content:space-between;flex-wrap:wrap">
+        <div class="rowline">
+          <span class="chip mono">score ${s.evaluated ? s.score + '/100 ' + s.grade : 'n/a'}</span>
+          <span class="chip">${s.total} findings</span>
+          <span class="chip">${s.passed} passed</span>
+          <span class="chip">${s.skipped} skipped</span>
+        </div>
+        <div class="toolbar">
+          <select id="sevFilter">
+            ${['all','critical','high','medium','low'].map(v=>`<option value="${v}" ${sev===v?'selected':''}>${v === 'all' ? '全部严重度' : v}</option>`).join('')}
+          </select>
+          <input class="input search" id="auditSearch" placeholder="搜索 ID / 标题 / 分类" value="${esc(state.auditFilter.q)}">
+          <button class="btn" id="auditReload">${ICON.refresh} 重新审计</button>
+        </div>
+      </div>
+    </div>
+    <div class="section" id="auditList">${findingList(filteredFindings())}</div>
+    ${a.skipped && a.skipped.length ? `<div class="section-head"><h2>跳过项</h2><p>权限或数据不可用</p></div>
+      <div class="card pad">${a.skipped.map(x=>`<div class="kv"><span>${esc(x)}</span></div>`).join('')}</div>` : ''}`;
+
+  $('#sevFilter')?.addEventListener('change', e => { state.auditFilter.sev = e.target.value; renderAuditList(); });
+  $('#auditSearch')?.addEventListener('input', e => { state.auditFilter.q = e.target.value; renderAuditList(); });
+  $('#auditReload')?.addEventListener('click', e => act(e.currentTarget, '审计中', async () => {
+    const r = await api('/api/audit'); state.audit = r.data; renderAudit(); toast('审计完成');
+  }));
+}
+
+function filteredFindings(){
+  const all = (state.audit?.findings) || [];
+  const q = state.auditFilter.q.toLowerCase();
+  const sev = state.auditFilter.sev;
+  return all.filter(f => (sev === 'all' || f.severity === sev) &&
+    (!q || (f.id + ' ' + f.title + ' ' + (f.category||'')).toLowerCase().includes(q)));
+}
+
+function renderAuditList(){
+  const el = $('#auditList');
+  if(el) el.innerHTML = findingList(filteredFindings());
+}
+
+function selectedActions(){
+  return [...document.querySelectorAll('.action input:checked')].map(x => x.value);
+}
+
+function renderHarden(){
+  const root = !!state.status?.platform?.is_root;
+  const plan = state.plan, result = state.hardenResult;
+  $('#view').innerHTML = `
+    <div class="card pad">
+      <div class="section-head" style="margin:0 0 12px"><h2>选择动作</h2><p>只写 drop-in，不修改主配置</p></div>
+      <div class="actions" id="actions">
+        ${[
+          ['ssh','SSH','禁用密码登录、root 仅密钥、MaxAuthTries 4'],
+          ['sysctl','sysctl','rp_filter、SYN cookies、内核信息保护'],
+          ['firewall','UFW','默认拒绝入站，先放行 22 再启用'],
+          ['fail2ban','Fail2ban','安装并写入 SSH jail 配置']
+        ].map(([id,t,d]) => `<label class="action"><input type="checkbox" value="${id}" ${state.hardenOnly.includes(id)?'checked':''}><span><b>${t}</b><small>${d}</small></span></label>`).join('')}
+      </div>
+      <div class="toolbar" style="margin-top:14px">
+        <button class="btn primary" id="planBtn">${ICON.scan} 生成计划</button>
+        <button class="btn danger" id="applyBtn" ${root?'':'disabled'}>${ICON.shield} 应用加固</button>
+        <span class="dim" style="font-size:11px">${root ? '需要输入 APPLY 二次确认' : '非 root 无法应用'}</span>
+      </div>
+    </div>
+
+    <div class="section-head"><h2>计划与结果</h2><p>真实执行输出</p></div>
+    <div id="hardenOut">${plan ? renderPlanHtml(plan) : '<div class="card empty">先生成计划，预览 diff 后再应用。</div>'}</div>`;
+
+  document.querySelectorAll('.action').forEach(el => {
+    const input = el.querySelector('input');
+    const sync = () => el.classList.toggle('checked', input.checked);
+    input.addEventListener('change', () => { sync(); state.hardenOnly = selectedActions(); });
+    sync();
+  });
+  $('#planBtn')?.addEventListener('click', e => act(e.currentTarget, '生成中', async () => {
+    const only = selectedActions();
+    if(!only.length){ toast('至少选择一个动作', 'err'); return; }
+    const r = await api('/api/harden/plan', {method:'POST', body:JSON.stringify({only})});
+    state.plan = r.data; state.hardenResult = null; renderHarden(); toast('计划已生成');
+  }));
+  $('#applyBtn')?.addEventListener('click', () => {
+    if(!root){ toast('需要 root 权限', 'err'); return; }
+    const only = selectedActions();
+    if(!only.length){ toast('至少选择一个动作', 'err'); return; }
+    const names = only.length ? only.join(', ') : (lang === 'en' ? 'all actions' : '全部动作');
+    openConfirm({
+      title:'应用加固',
+      message: lang === 'en'
+        ? `Will apply hardening to ${names}. A snapshot is taken first; failures roll back automatically.`
+        : `将对 ${names} 执行变更。系统会先写快照，失败自动回滚。`,
+      danger: only.includes('firewall')
+        ? 'UFW 会默认拒绝入站。请确认 Web 端口和 SSH 已在 allow_ports，并保留带外通道，否则可能无法再访问控制台。'
+        : 'SSH 配置错误可能导致远程连接中断，请确认已有可用密钥和带外通道。',
+      requireText:'APPLY',
+      confirmLabel:'执行加固',
+      onConfirm: async btn => {
+        const r = await api('/api/harden/apply', {method:'POST', body:JSON.stringify({only, confirm:'APPLY'})});
+        state.hardenResult = r.data; state.plan = r.data; closeModal(); renderHarden();
+        toast(`加固完成，退出码 ${r.exit_code}`);
+      }
+    });
+  });
+}
+
+function renderPlanHtml(data){
+  const plans = data.plans || [];
+  const result = data.result;
+  if(!plans.length && !result) return `<div class="card empty">没有需要变更的动作。</div>`;
+  let html = plans.map(p => `
+    <div class="card pad" style="margin-bottom:10px">
+      <div class="rowline" style="justify-content:space-between">
+        <div class="rowline"><span class="chip mono">${esc(p.action)}</span><b>${esc(p.title)}</b></div>
+      </div>
+      ${p.risk ? `<p class="dim" style="font-size:11px;margin:8px 0 0">risk: ${esc(p.risk)}</p>` : ''}
+      ${(p.changes||[]).map(c => `
+        <div style="margin-top:10px">
+          <div class="mono" style="font-size:11px;color:#CBD5E1">${esc(c.target)}</div>
+          ${c.diff ? `<pre>${esc(c.diff)}</pre>` : `<pre class="wrap">${esc(c.method === 'package' ? 'package: ' + c.after : c.after)}</pre>`}
+        </div>`).join('')}
+    </div>`).join('');
+  if(result){
+    const actions = result.actions || [];
+    const stateText = result.rollback_failed ? '回滚失败' : result.rolled_back ? '已回滚' : '成功';
+    html += `<div class="card pad">
+      <div class="rowline" style="justify-content:space-between;flex-wrap:wrap">
+        <div class="rowline"><span class="chip ${result.rollback_failed?'warn':''}">${esc(stateText)}</span>
+        <span class="chip mono">snapshot: ${esc(result.snapshot_id || '—')}</span></div>
+      </div>
+      <table style="margin-top:10px"><thead><tr><th>Action</th><th>Applied</th><th>Verified</th><th>Detail</th></tr></thead><tbody>
+        ${actions.map(a => `<tr><td class="mono">${esc(a.action)}</td><td>${a.applied?'<span class="status ok">true</span>':'<span class="status err">false</span>'}</td>
+        <td>${a.verified?'<span class="status ok">true</span>':'<span class="status err">false</span>'}</td><td class="muted">${esc(a.detail)}</td></tr>`).join('')}
+      </tbody></table></div>`;
+  }
+  return html;
+}
+
+function renderDetect(){
+  const d = state.detect;
+  if(!d){ $('#view').innerHTML = `<div class="card pad"><div class="skeleton" style="width:40%;height:22px"></div></div>`; return; }
+  const s = d.summary || {};
+  const auth = s.auth || {}, auditd = s.auditd || {}, aide = s.aide || {}, proc = s.processes || {}, base = s.file_baseline || {};
+  $('#view').innerHTML = `
+    <div class="grid g4">
+      <div class="card metric"><div class="k">Failed logins</div><div class="v">${num(auth.failed)}</div><div class="sub">source ${esc(auth.source || '—')}</div></div>
+      <div class="card metric"><div class="k">Accepted logins</div><div class="v">${num(auth.accepted)}</div><div class="sub">SSH auth log</div></div>
+      <div class="card metric"><div class="k">auditd</div><div class="v">${auditd.active ? 'active' : 'inactive'}</div><div class="sub">${num(auditd.rule_count)} rules</div></div>
+      <div class="card metric"><div class="k">AIDE database</div><div class="v">${aide.database_present ? 'present' : 'missing'}</div><div class="sub">installed ${String(aide.installed)}</div></div>
+    </div>
+    <div class="grid g3 section">
+      <div class="card metric"><div class="k">Suspicious processes</div><div class="v">${num(proc.suspicious)}</div><div class="sub">/proc scan</div></div>
+      <div class="card metric"><div class="k">Baseline changes</div><div class="v">${(base.changes || []).length}</div><div class="sub">SHA256 file baseline</div></div>
+      <div class="card metric"><div class="k">Events written</div><div class="v">${num(d.events_written)}</div><div class="sub">events.jsonl</div></div>
+    </div>
+    <div class="section-head"><h2>检测结果</h2><p>${(d.findings||[]).length} findings</p></div>
+    ${findingList(d.findings || [])}
+    <div class="toolbar section">
+      <button class="btn" id="detectReload">${ICON.refresh} 重新检测</button>
+      <button class="btn" id="baselineBtn">${ICON.shield} 初始化文件基线</button>
+    </div>`;
+  $('#detectReload')?.addEventListener('click', e => act(e.currentTarget, '检测中', async () => {
+    const r = await api('/api/detect'); state.detect = r.data; renderDetect(); toast('检测完成');
+  }));
+  $('#baselineBtn')?.addEventListener('click', () => openConfirm({
+    title:'初始化文件基线',
+    message:'将把当前关键文件的 SHA256 写入基线。之后新增、修改或缺失都会被检测出来。',
+    requireText:'BASELINE',
+    confirmLabel:'初始化',
+    onConfirm: async () => {
+      const r = await api('/api/detect/baseline', {method:'POST', body:'{}'});
+      state.detect = r.data; closeModal(); renderDetect(); toast('基线已初始化');
+    }
+  }));
+}
+
+function renderMonitor(){
+  const m = state.monitor;
+  if(!m){ $('#view').innerHTML = `<div class="card pad"><div class="skeleton" style="width:40%;height:22px"></div></div>`; return; }
+  const met = m.metrics || {};
+  const checks = m.checks || [];
+  const disks = met.disk_usage || [];
+  const services = met.services || [];
+  const gauge = (label, value, threshold, suffix='%') => {
+    const v = value === null || value === undefined ? null : Number(value);
+    const w = v === null ? 0 : Math.min(100, v);
+    const c = v === null ? 'var(--dim)' : (threshold && v > threshold ? 'var(--red)' : 'var(--teal)');
+    return `<div class="card gauge">
+      <div class="head"><span>${esc(label)}</span><b style="color:${c}">${v === null ? '—' : (suffix === '%' ? v.toFixed(1)+'%' : v.toFixed(2))}</b></div>
+      <div class="bar"><i style="width:${w}%;background:${c}"></i></div>
+      <div class="foot">threshold ${threshold ?? '—'}${suffix}</div>
+    </div>`;
+  };
+  $('#view').innerHTML = `
+    <div class="rowline" style="justify-content:space-between;margin-bottom:12px">
+      <div class="rowline">
+        <span class="chip mono">source: ${esc(m.metrics_source || '—')}</span>
+        <span class="chip">${checks.length} checks</span>
+        <span class="chip">${(m.findings||[]).length} findings</span>
+      </div>
+      <button class="btn" id="monReload">${ICON.refresh} 重新采样</button>
+    </div>
+    <div class="grid g4">
+      ${gauge('CPU', met.cpu_percent, 85)}
+      ${gauge('Memory', met.memory_percent, 85)}
+      ${gauge('Load / core', met.load_per_core, 1.5, '')}
+      ${gauge('Disk ' + (disks[0]?.mount || '/'), disks[0]?.used_percent, 85)}
+    </div>
+    <div class="grid g2 section">
+      <div class="card pad">
+        <div class="section-head" style="margin:0 0 8px"><h2>服务</h2><p>systemd</p></div>
+        ${services.length ? services.map(s => `<div class="kv"><span><span class="dot ${s.active?'on':'off'}"></span> ${esc(s.name)}</span><span>${s.active ? 'active' : 'inactive'}</span></div>`).join('') : '<div class="empty">没有配置服务检查</div>'}
+      </div>
+      <div class="card pad">
+        <div class="section-head" style="margin:0 0 8px"><h2>磁盘</h2><p>挂载点</p></div>
+        ${disks.length ? disks.map(d => `<div class="kv"><span>${esc(d.mount)}</span><span>${Number(d.used_percent).toFixed(1)}%</span></div>`).join('') : '<div class="empty">没有磁盘数据</div>'}
+      </div>
+    </div>
+    <div class="section-head"><h2>检查项</h2><p>阈值判定</p></div>
+    <div class="card" style="overflow:auto">
+      <table><thead><tr><th>Check</th><th>Status</th><th>Value</th><th>Threshold</th><th>Detail</th></tr></thead><tbody>
+        ${checks.map(c => `<tr><td class="mono">${esc(c.name)}</td><td>${statusBadge(c.status)}</td><td class="mono">${c.value ?? '—'}</td><td class="mono">${c.threshold ?? '—'}</td><td class="muted">${esc(c.detail)}</td></tr>`).join('')}
+      </tbody></table>
+    </div>
+    ${(m.findings||[]).length ? `<div class="section-head"><h2>告警</h2><p>阈值命中</p></div>${findingList(m.findings)}` : ''}`;
+  $('#monReload')?.addEventListener('click', e => act(e.currentTarget, '采样中', async () => {
+    const r = await api('/api/monitor'); state.monitor = r.data; renderMonitor(); toast('采样完成');
+  }));
+}
+
+function renderBackups(){
+  const b = state.backups;
+  const rows = (b?.snapshots || []).map(s => `
+    <tr>
+      <td class="mono">${esc(s.snapshot_id)}</td>
+      <td>${esc(s.created_at || '—')}</td>
+      <td class="mono">${num(s.files)}</td>
+      <td>${s.compressed ? 'yes' : 'no'}</td>
+      <td class="toolbar">
+        <button class="btn ghost" data-snap="${esc(s.snapshot_id)}" data-op="verify">verify</button>
+        <button class="btn ghost" data-snap="${esc(s.snapshot_id)}" data-op="drill">drill</button>
+      </td>
+    </tr>`).join('');
+  $('#view').innerHTML = `
+    <div class="card pad">
+      <div class="rowline" style="justify-content:space-between;flex-wrap:wrap">
+        <div>
+          <h2 style="margin:0 0 5px;font-size:16px">配置快照</h2>
+          <p class="dim" style="margin:0;font-size:11px">manifest + SHA256 · verify 校验 · drill 临时目录演练</p>
+        </div>
+        <div class="toolbar">
+          <button class="btn" id="bkReload">${ICON.refresh} 刷新</button>
+          <button class="btn primary" id="bkCreate">${ICON.play} 创建快照</button>
+        </div>
+      </div>
+    </div>
+    <div class="section-head"><h2>快照列表</h2><p>${(b?.snapshots||[]).length} snapshots</p></div>
+    <div class="card" style="overflow:auto">
+      ${rows ? `<table><thead><tr><th>Snapshot</th><th>Created</th><th>Files</th><th>Compressed</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>` : '<div class="empty">还没有快照，点击“创建快照”。</div>'}
+    </div>
+    <div id="bkOut"></div>`;
+
+  $('#bkReload')?.addEventListener('click', e => act(e.currentTarget, '加载中', async () => {
+    const r = await api('/api/backups'); state.backups = r.data; renderBackups();
+  }));
+  $('#bkCreate')?.addEventListener('click', e => act(e.currentTarget, '创建中', async () => {
+    const r = await api('/api/backup/create', {method:'POST', body:JSON.stringify({label:'web'})});
+    const out = `<div class="section-head"><h2>创建结果</h2></div><pre class="wrap">${esc(JSON.stringify(r.data, null, 2))}</pre>`;
+    const l = await api('/api/backups'); state.backups = l.data; renderBackups();
+    const box = document.querySelector('#bkOut'); if(box) box.innerHTML = out;
+    toast('快照已创建');
+  }));
+  document.querySelectorAll('[data-snap]').forEach(btn => btn.addEventListener('click', e => {
+    const b2 = e.currentTarget; const id = b2.dataset.snap; const op = b2.dataset.op;
+    act(b2, op, async () => {
+      const r = await api('/api/backup/' + op, {method:'POST', body:JSON.stringify({snapshot_id:id})});
+      $('#bkOut').innerHTML = `<div class="section-head"><h2>${op} 结果</h2><p>${esc(id)}</p></div><pre class="wrap">${esc(JSON.stringify(r.data, null, 2))}</pre>`;
+      toast(`${op} 完成`);
+    });
+  }));
+}
+
+function renderReport(){
+  $('#view').innerHTML = `
+    <div class="card pad">
+      <div class="rowline" style="justify-content:space-between;flex-wrap:wrap">
+        <div>
+          <h2 style="margin:0 0 6px;font-size:16px">合并报告</h2>
+          <p class="dim" style="margin:0;font-size:11px">审计 + 检测 + 健康检查，自包含 HTML，离线可看。</p>
+        </div>
+        <button class="btn primary" id="reportBtn">${ICON.play} 生成报告</button>
+      </div>
+    </div>
+    <div class="section">
+      ${state.reportUrl
+        ? `<div class="rowline" style="justify-content:space-between;margin-bottom:8px">
+             <span class="chip">已生成</span>
+             <a class="btn ghost" href="${state.reportUrl}" target="_blank" rel="noopener">新窗口打开</a>
+           </div>
+           <iframe src="${state.reportUrl}" style="width:100%;height:640px;border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>`
+        : `<div class="card empty">点击“生成报告”，会运行审计、检测和健康检查。</div>`}
+    </div>`;
+  $('#reportBtn')?.addEventListener('click', e => act(e.currentTarget, '生成中', async () => {
+    const r = await api('/api/report', {method:'POST', body:'{}'});
+    state.reportUrl = r.url + '?t=' + Date.now(); renderReport(); toast('报告已生成');
+  }));
+}
+
+function act(btn, label, fn){
+  const restore = setBusy(btn, label);
+  return Promise.resolve().then(fn).catch(e => toast(e.message, 'err')).finally(restore);
+}
+
+function openConfirm({title, message, danger, requireText, confirmLabel, onConfirm}){
+  const box = $('#modalBox');
+  box.innerHTML = `
+    <h3>${esc(title)}</h3>
+    <p>${esc(message)}</p>
+    ${danger ? `<div class="dangerbox">${esc(danger)}</div>` : ''}
+    ${requireText ? `<input class="input" id="confirmInput" style="width:100%" placeholder="输入 ${esc(requireText)} 继续">` : ''}
+    <div class="modal-actions">
+      <button class="btn ghost" id="modalCancel">取消</button>
+      <button class="btn danger" id="modalOk" ${requireText ? 'disabled' : ''}>${esc(confirmLabel || '确认')}</button>
+    </div>`;
+  $('#modal').classList.add('open');
+  applyI18n(box);
+  const ok = $('#modalOk');
+  if(requireText){
+    $('#confirmInput').addEventListener('input', e => { ok.disabled = e.target.value !== requireText; });
+    setTimeout(() => $('#confirmInput').focus(), 30);
+  }
+  const close = () => closeModal();
+  $('#modalCancel').onclick = close;
+  $('#modal').onclick = e => { if(e.target.id === 'modal') close(); };
+  ok.onclick = async () => {
+    const restore = setBusy(ok, '执行中');
+    try{ await onConfirm(ok); }
+    catch(e){ toast(e.message, 'err'); restore(); }
+  };
+}
+
+function closeModal(){ $('#modal').classList.remove('open'); }
+
+document.querySelectorAll('.nav').forEach(btn => btn.addEventListener('click', () => go(btn.dataset.view)));
+$('#themeBtn')?.addEventListener('click', () => applyTheme(theme === 'dark' ? 'light' : 'dark'));
+$('#langBtn')?.addEventListener('click', () => setLang(lang === 'en' ? 'zh' : 'en'));
+$('#refreshBtn').addEventListener('click', e => act(e.currentTarget, '刷新中', async () => {
+  await loadStatus();
+  if(state.view === 'overview') await loadOverview();
+  if(state.view === 'audit') await loadAudit();
+  if(state.view === 'detect') await loadDetect();
+  if(state.view === 'monitor') await loadMonitor();
+  if(state.view === 'backups') await loadBackups();
+  toast('已刷新');
+}));
+
+applyTheme(theme);
+$('#langBtn').textContent = lang === 'en' ? '中' : 'EN';
+applyI18n(document.body);
+loadStatus().then(() => go('overview'));
+</script>
+</body>
+</html>

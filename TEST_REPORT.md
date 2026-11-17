@@ -246,4 +246,19 @@
 - 未决：
   - 安全组同时放行 3389 时，外部探测仍不可达（UFW/host 阻止），未能完成“UFW allow 后端口开放”的正向对照，记录为待复核
 
+### Web 控制台验证（v1.1.0）
+
+- 环境：WSL2 Ubuntu 24.04.4 / Python 3.12.3；以 root 启动 `ubuntuguard web --host 0.0.0.0 --port 8080`
+- 自动化：`tests/unit/test_web.py` 9 项通过；完整套件 174 项通过；ruff / mypy 通过
+- 手工验证：
+  - 总览加载真实评分、风险分布、CPU/内存/磁盘/负载与主机信息
+  - 审计页按严重度筛选、搜索（输入焦点不丢失）、展开 evidence / remediation
+  - 加固页生成 firewall / fail2ban diff；`APPLY` 弹窗初始禁用，输入后启用
+  - 备份页 verify 返回 `valid: true`；报告生成后 iframe 正常加载
+  - 深色/浅色、中文/英文全页面切换无残留中文；`localStorage` 持久化
+- 安全：HTML 响应带 CSP；POST 无 token 返回 403；无 `confirm=APPLY` 返回 400；报告 `frame-ancestors 'self'` 可内嵌
+- 未决：
+  - 控制台无登录认证与 HTTPS，默认只绑回环；公网部署需加认证反向代理
+  - 未做多用户 / RBAC / 操作审计
+
 > 后续阶段按 ROADMAP 顺序追加，未通过验收不得标注完成。

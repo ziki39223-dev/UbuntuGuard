@@ -31,7 +31,7 @@ GPG_KEY_ID=8BF8FCCAED0FBB4143551C962ED6CE4E611E22A9 \
 apt-repo/
 ├── dists/noble/{InRelease,Release,Release.gpg}
 ├── dists/noble/main/binary-amd64/{Packages,Packages.gz}
-├── pool/main/u/ubuntuguard/ubuntuguard_1.0.2-1_all.deb
+├── pool/main/u/ubuntuguard/ubuntuguard_1.1.0-1_all.deb
 └── ubuntuguard-archive-keyring.{gpg,asc}
 ```
 

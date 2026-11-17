@@ -34,23 +34,23 @@ GPG_KEY_ID=8BF8FCCAED0FBB4143551C962ED6CE4E611E22A9 \
 产物（`dist/ppa/`）：
 
 ```text
-ubuntuguard_1.0.2.orig.tar.gz
-ubuntuguard_1.0.2-1.debian.tar.xz
-ubuntuguard_1.0.2-1.dsc
-ubuntuguard_1.0.2-1_source.changes
+ubuntuguard_1.1.0.orig.tar.gz
+ubuntuguard_1.1.0-1.debian.tar.xz
+ubuntuguard_1.1.0-1.dsc
+ubuntuguard_1.1.0-1_source.changes
 ```
 
 验证：
 
 ```bash
-gpg --verify dist/ppa/ubuntuguard_1.0.2-1_source.changes
-grep '^Distribution:' dist/ppa/ubuntuguard_1.0.2-1_source.changes   # noble
+gpg --verify dist/ppa/ubuntuguard_1.1.0-1_source.changes
+grep '^Distribution:' dist/ppa/ubuntuguard_1.1.0-1_source.changes   # noble
 ```
 
 ## 4. 上传
 
 ```bash
-dput ppa:<launchpad-id>/<ppa-name> dist/ppa/ubuntuguard_1.0.2-1_source.changes
+dput ppa:<launchpad-id>/<ppa-name> dist/ppa/ubuntuguard_1.1.0-1_source.changes
 ```
 
 上传后 Launchpad 会回信并在 PPA 页面构建；构建失败可查看 "Build status" 日志，通常是缺少 `Build-Depends` 或 changelog 格式问题。

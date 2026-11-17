@@ -6,7 +6,7 @@
 
 面向 Ubuntu 22.04 / 24.04 的自动化安全运维与主机健康保障 CLI 工具。
 
-当前版本：**v1.0.2**。收集 → 审计 → 加固 → 检测 → 监控 → 备份 → 报告全链路可用；40 条规则对齐 CIS，加固支持快照、生效校验与回滚。已在阿里云 Ubuntu 22.04 公网实例完成端到端验证。
+当前版本：**v1.1.0**。收集 → 审计 → 加固 → 检测 → 监控 → 备份 → 报告全链路可用；40 条规则对齐 CIS，加固支持快照、生效校验与回滚，附带支持黑白主题与中英文切换的 Web 控制台。已在阿里云 Ubuntu 22.04 / 24.04 公网实例完成端到端验证。
 
 ![UbuntuGuard 架构图](docs/architecture.svg)
 
@@ -33,10 +33,10 @@ echo "deb [signed-by=/usr/share/keyrings/ubuntuguard-archive-keyring.gpg] https:
 sudo apt update && sudo apt install ubuntuguard
 
 # 2. 源码 / 虚拟环境（22.04 与 24.04 均可）
-python3 -m venv /opt/ug && /opt/ug/bin/pip install "git+https://github.com/ziki39223-dev/UbuntuGuard.git@v1.0.2"
+python3 -m venv /opt/ug && /opt/ug/bin/pip install "git+https://github.com/ziki39223-dev/UbuntuGuard.git@v1.1.0"
 
 # 3. 离线 deb（Release 附件，Ubuntu 24.04）
-sudo apt install ./ubuntuguard_1.0.2-1_all.deb
+sudo apt install ./ubuntuguard_1.1.0-1_all.deb
 ```
 
 仓库元数据使用 GPG 签名（`InRelease`），生成、发布与密钥轮换流程见 [docs/PACKAGE_SIGNING.md](docs/PACKAGE_SIGNING.md)。要求 Python ≥ 3.10，运行期仅依赖 PyYAML；HTML 报告使用内置渲染器，无需模板引擎。
@@ -84,6 +84,7 @@ ubuntuguard report --format html --out report.html   # 合并报告
 ubuntuguard export ansible --out harden.yml          # 导出 Ansible playbook
 ubuntuguard systemd install               # 安装并启用定时器（需 root）
 ubuntuguard systemd uninstall             # 停止并移除定时器（需 root）
+ubuntuguard web                           # 启动本地 Web 控制台（默认 127.0.0.1:8080）
 ubuntuguard config validate               # 使用默认配置时仅提示，不报错
 ubuntuguard --config configs/config.example.yaml config show
 ubuntuguard --json doctor                 # 机器可读输出
@@ -94,6 +95,24 @@ ubuntuguard --json doctor                 # 机器可读输出
 审计提示：`audit` 以普通用户运行时会跳过 `/etc/shadow`、`/etc/sudoers` 等需 root 的检查，并在报告中列出 `skipped` 原因；若没有任何检查可执行，输出 `score: n/a` 并以退出码 9 结束，避免误判为满分。
 
 加固提示：`harden plan` 只输出 diff 与命令清单；`harden apply` 必须同时给出 `--apply --yes` 且需要 root。执行前会写入快照（`<state_dir>/snapshots`，含 manifest 与 SHA256），任一步校验失败会自动恢复文件并回滚运行时，退出码 6 表示已回滚、7 表示回滚失败。由 apt 安装的软件包不会自动卸载（见 DECISIONS D-014）。
+
+## Web 控制台
+
+```bash
+sudo ubuntuguard web --port 8080
+# 打开 http://127.0.0.1:8080
+```
+
+页面包含总览、基线审计、安全加固、异常检测、健康监控、备份恢复和报告七个视图，数据来自同一套 CLI：
+
+- 总览：评分、风险分布、CPU/内存/磁盘/负载、主机与依赖。
+- 审计：按严重度筛选、搜索、展开 evidence / remediation / CIS 引用。
+- 加固：勾选动作生成 diff；应用需输入 `APPLY` 二次确认，服务端仍走快照、校验和回滚。
+- 检测 / 监控 / 备份：登录、auditd/AIDE、SHA256 基线、阈值检查、快照 verify/drill。
+- 报告：生成自包含 HTML 并在页面内预览。
+- 界面：右上角切换深色/浅色与中文/英文，选择写入 `localStorage`；技术数据（finding、证据、命令）保持原文。
+
+实现只使用标准库 `http.server`，默认绑定本地回环地址，不引入 Flask/FastAPI。POST 动作需要页面内注入的随机 token，确认类操作额外要求输入 `APPLY`。**控制台没有登录认证，不要直接暴露到公网**；在 WSL 中从 Windows 浏览器访问演示时可临时使用 `--host 0.0.0.0`，仅限本机。
 
 ## 配置
 

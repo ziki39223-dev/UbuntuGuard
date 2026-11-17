@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ubuntuguard"
-version = "1.0.2"
+version = "1.1.0"
 description = "Ubuntu security baseline audit and reversible hardening CLI"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -19,6 +19,9 @@ ubuntuguard = "ubuntuguard.cli.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+ubuntuguard = ["web/index.html"]
 
 [tool.ruff]
 line-length = 100

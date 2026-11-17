@@ -33,13 +33,13 @@ def _users_available(snapshot: SystemSnapshot) -> str | None:
 
 def _shadow_available(snapshot: SystemSnapshot) -> str | None:
     if not snapshot.shadow.readable:
-        return "shadow not readable (requires root)"
+        return "shadow not readable (missing or requires root)"
     return None
 
 
 def _sudoers_available(snapshot: SystemSnapshot) -> str | None:
     if not snapshot.sudoers.readable:
-        return "sudoers not readable (requires root)"
+        return "sudoers not readable (missing or requires root)"
     return None
 
 

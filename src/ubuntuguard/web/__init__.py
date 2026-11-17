@@ -1,0 +1,1 @@
+"""UbuntuGuard web console package."""
