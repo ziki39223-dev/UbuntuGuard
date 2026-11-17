@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Architectures: amd64
+Codename: jammy
+Components: main
+Date: Tue, 17 Nov 2026 03:41:53 +0000
+Description: UbuntuGuard APT repository
+Label: UbuntuGuard
+Origin: UbuntuGuard
+Suite: jammy
+MD5Sum:
+ f3a06420251c304e1f0a6895214071d0              184 Release
+ 3941a398476d481367a6ac9aaa20b855              789 main/binary-amd64/Packages
+ d466b238278b527074837b0605f6573f              518 main/binary-amd64/Packages.gz
+SHA1:
+ 1660460036177e8164cb742f7583f223eb32868d              184 Release
+ 351dd1df38c5f4d9124599a7eb1996838779bf3d              789 main/binary-amd64/Packages
+ 56742347b4b0c6920bf1c1d90ecfa97c75639df9              518 main/binary-amd64/Packages.gz
+SHA256:
+ c9459c7c44c17aa26dfe1eac2967aee39170de52bb64bdf4043e10e35a5e5b15              184 Release
+ 5d695a3e4d6730e5e8802f5fcedf1cce9fa92f0cd13ce5cebae755b9b57a8ced              789 main/binary-amd64/Packages
+ 0e17b09bcb3d7f20388d00bc46eb2117566d1e396f6ac54aaabea047f9f74784              518 main/binary-amd64/Packages.gz
+SHA512:
+ 00b98bf87ca6b026669c76c8a98986b615ecbc228050960934f6fcdedd0f017f58ca36943408b385b827a015af9e5ef62c66e42291740a6bf85531222761e2b5              184 Release
+ 7fe8b0504e69d11d74947ee257ed15074f367814bdf8f261944153a8793edaa0176b318ce16325742d1124dc3a4d00941ed88e70e41aad244110af1453aaf255              789 main/binary-amd64/Packages
+ 624c5fc3cd90121d4ac3e69e862c17cf76a4499fc60dfe22d3ef201c5aa782f76ac143e61bbbfd63967e2b20300226a647429757e32cc2bfaa02278a0eba9d70              518 main/binary-amd64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEi/j8yu0Pu0FDVRyWLtbOTmEeIqkFAmr7zQEACgkQLtbOTmEe
+IqkjDA//e/kp69q7VQ8mz5FE6yMbo/0DLRb0cHjngftKqSxyNCAb/YLtntcDCcnm
+XG1bhyoYe+hLbngg1vK9+fBeGrBSDsWhDon2a/GbZgjEwV/CQ4L3Y0BhSQ2k4lHk
+YO+VnUy3iC9E434owhxkZLX4mhoYzyrNATmfnWdAg8O4p7gNv76Iq/vWUvMKJirO
+7WNEs9hItuEambSWXPmOPebu90XgehTx8PrZWG/MY6qDmv0faxE5qGcqpK5DZKqo
+o+qgHKNIEf8HZXigOOVg742FbUf8Seac3wKN4eOWzJnv17UqOJdRcgwVRyjeBrsu
+fgBnXe7ZV32wuTT+XW9zi6624MfSAp5biWvtir/OaZnf4OGAbCxEyHMeABFDQcII
+tjf/GGsKpmebyd8w/fShXMIdTbWdBw2H+jIE/Q9625pfyP5daZyPTffhuKPfFue5
+HALgXa/4Gs2oj7bpYQpP4yvgLMfi2ySn+mNMNdujDK3X0wPeXlQpJYgCXEUYmkZI
+zOpao5ZyYJNJDJ5th8GmNVox70DxdqkrZfWL0C1eJ8+CGS3y+EqjJ/DvgBjyN92d
+axSrs4g0pxR0POfPJuLBe50d4D7DymM7fzXLgAoeXzfPYR/TCApT/TGwu0xMpakk
+9/QoStXLY31N8NiOoHzxcPyF5WKIzf3wytljZ28bLNqywunaXKc=
+=SMV/
+-----END PGP SIGNATURE-----
