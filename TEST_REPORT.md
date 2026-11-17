@@ -208,13 +208,13 @@
 
 - 环境：GitHub Actions `ubuntu-24.04` Runner（真实 VM + systemd），启用 openssh-server / ufw / auditd / AIDE，执行 `scripts/integration-test.sh`
 - 结果（run 44014394000）：34 项断言全部通过；本地 WSL 复跑 31 项通过（auditd 因 WSL 内核不支持而 SKIP）
-  - 审计基线：加固前 17 findings（score 0），`FW-001` 与 `SSH-002` 均被检出
+  - 审计基线：加固前 17 findings（score 0），`FW-001` 被检出；`SSH-002` 是否出现取决于镜像 sshd 默认值（脚本以加固前实测值作为恢复基线）
   - 加固：`harden apply --only ssh,sysctl,firewall` 退出码 0；`sshd -T` 生效（PasswordAuthentication no / MaxAuthTries 4 / PermitRootLogin prohibit-password）、`rp_filter=1`、ufw active 且默认 deny incoming
   - 加固后审计：12 findings（score 15），`FW-001` 消除，finding 数下降
   - 检测：auditd 服务与 `/etc/sudoers`、`/etc/ssh` watch 均被识别；AIDE 缺库按预期报告；文件基线初始化后无差异
   - 监控：ssh 服务健康，无 `HEALTH-005`
   - systemd：安装后两个 timer 均为 enabled，卸载后 `/etc/systemd/system` 单元移除
-  - 恢复：加固前快照 `verified=true`，SSH drop-in 被删除且 `sshd -T` 回到 PasswordAuthentication yes
+  - 恢复：加固前快照 `verified=true`，SSH drop-in 被删除且 `sshd -T` 的 PasswordAuthentication 回到加固前实测值
   - 报告：自包含 HTML 约 9.7 KB
 - 本轮发现并修复的问题：
   1. **云端 SSH 加固被覆盖**：sshd 对同一关键字取首个值且按字典序加载 drop-in，`99-ubuntuguard.conf` 被 `50-cloud-init.conf` 覆盖 → 改为 `00-ubuntuguard.conf`，同步备份路径、文件基线与 Ansible 导出（D-008）

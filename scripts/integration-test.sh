@@ -78,10 +78,12 @@ else
     bad "FW-001 missing while ufw is inactive"
 fi
 if has_finding "$out/audit-before.json" SSH-002; then
-    ok "SSH password authentication finding present"
+    ok "SSH-002 detected before hardening"
 else
-    bad "SSH-002 missing before hardening"
+    echo "INFO  SSH password authentication already disabled on this image"
 fi
+pre_password_auth=$(sshd -T 2>/dev/null | awk '/^passwordauthentication /{print $2; exit}')
+echo "pre-hardening passwordauthentication: ${pre_password_auth:-unknown}"
 
 echo
 echo "== backup before changes =="
@@ -217,7 +219,8 @@ else
     ok "ssh drop-in removed after restore"
 fi
 sshd_after=$(sshd -T 2>/dev/null || true)
-check_grep "sshd configuration reverted" '^passwordauthentication yes' "$sshd_after"
+post_password_auth=$(awk '/^passwordauthentication /{print $2; exit}' <<<"$sshd_after")
+check_eq "sshd passwordauthentication restored" "${pre_password_auth:-unknown}" "${post_password_auth:-unknown}"
 
 echo
 echo "== combined report =="

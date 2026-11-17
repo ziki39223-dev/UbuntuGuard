@@ -11,7 +11,7 @@
 
 ### Added
 
-- `scripts/integration-test.sh` 与 CI `integration` 任务：在 GitHub Runner（真实 systemd）启用 ufw/auditd/AIDE/sshd，执行 34 项端到端断言（审计→备份→加固→生效校验→检测→监控→systemd 单元→恢复→报告）。
+- `scripts/integration-test.sh` 与 CI `integration` 任务：在 GitHub Runner（真实 systemd）启用 ufw/auditd/AIDE/sshd，执行 30 余项端到端断言（审计→备份→加固→生效校验→检测→监控→systemd 单元→恢复→报告）。
 
 ## [1.0.0] - 2026-11-17
 

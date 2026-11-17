@@ -50,7 +50,7 @@ wsl -d UbuntuGuard-24.04 -- bash -lc "cd /root/UbuntuGuard && /root/venv/bin/pyt
 - `UbuntuGuard-24.04`：Ubuntu 24.04.4，Python 3.12.3
 - 两个环境均已启用 systemd，并安装 openssh-server / ufw / fail2ban / auditd / aide
 - 项目副本：`/root/UbuntuGuard`；虚拟环境：`/root/venv`
-- CI 的 `integration` 任务在 GitHub Runner（真实 systemd）上启用 auditd/AIDE/UFW，执行 `scripts/integration-test.sh` 的 34 项端到端断言
+- CI 的 `integration` 任务在 GitHub Runner（真实 systemd）上启用 auditd/AIDE/UFW，执行 `scripts/integration-test.sh` 的 30 余项端到端断言
 
 ## 使用
 
