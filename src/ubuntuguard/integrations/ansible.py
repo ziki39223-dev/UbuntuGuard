@@ -23,7 +23,7 @@ def build_ansible_playbook(
         {
             "name": "Deploy SSH hardening drop-in",
             "ansible.builtin.copy": {
-                "dest": "/etc/ssh/sshd_config.d/99-ubuntuguard.conf",
+                "dest": "/etc/ssh/sshd_config.d/00-ubuntuguard.conf",
                 "content": render_sshd_dropin(config),
                 "owner": "root",
                 "group": "root",

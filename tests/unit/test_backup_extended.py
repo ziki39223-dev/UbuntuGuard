@@ -18,7 +18,7 @@ def _make_files(tmp_path: Path) -> tuple[Path, Path, Path]:
     (root / "sshd_config.d").mkdir(parents=True)
     passwd = root / "passwd"
     passwd.write_text("root:x:0:0\n", encoding="utf-8")
-    sshd = root / "sshd_config.d" / "99-ubuntuguard.conf"
+    sshd = root / "sshd_config.d" / "00-ubuntuguard.conf"
     sshd.write_text("PermitRootLogin no\n", encoding="utf-8")
     group = root / "group"
     group.write_text("root:x:0:\n", encoding="utf-8")

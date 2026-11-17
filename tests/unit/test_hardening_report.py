@@ -11,7 +11,7 @@ PLAN = ChangePlan(
     title="SSH server hardening",
     changes=(
         Change(
-            target="/etc/ssh/sshd_config.d/99-ubuntuguard.conf",
+            target="/etc/ssh/sshd_config.d/00-ubuntuguard.conf",
             method="dropin",
             before="PermitRootLogin yes\n",
             after="PermitRootLogin no\n",
@@ -20,7 +20,7 @@ PLAN = ChangePlan(
         ),
     ),
     risk="lockout risk",
-    targets=("/etc/ssh/sshd_config.d/99-ubuntuguard.conf",),
+    targets=("/etc/ssh/sshd_config.d/00-ubuntuguard.conf",),
 )
 
 

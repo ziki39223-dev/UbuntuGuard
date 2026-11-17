@@ -270,7 +270,7 @@ def _check_root_login(snapshot: SystemSnapshot) -> Finding | None:
     return finding(
         SSH_ROOT_LOGIN,
         _evidence(snapshot, "PermitRootLogin", value),
-        "Set 'PermitRootLogin no' in /etc/ssh/sshd_config.d/99-ubuntuguard.conf",
+        "Set 'PermitRootLogin no' in /etc/ssh/sshd_config.d/00-ubuntuguard.conf",
     )
 
 
@@ -292,7 +292,7 @@ def _check_empty_passwords(snapshot: SystemSnapshot) -> Finding | None:
     return finding(
         SSH_EMPTY_PASSWORDS,
         _evidence(snapshot, "PermitEmptyPasswords", value),
-        "Set 'PermitEmptyPasswords no' in /etc/ssh/sshd_config.d/99-ubuntuguard.conf",
+        "Set 'PermitEmptyPasswords no' in /etc/ssh/sshd_config.d/00-ubuntuguard.conf",
     )
 
 
@@ -314,7 +314,7 @@ def _check_max_auth_tries(snapshot: SystemSnapshot) -> Finding | None:
     return finding(
         SSH_MAX_AUTH_TRIES,
         _evidence(snapshot, "MaxAuthTries", str(value)),
-        "Set 'MaxAuthTries 4' in /etc/ssh/sshd_config.d/99-ubuntuguard.conf",
+        "Set 'MaxAuthTries 4' in /etc/ssh/sshd_config.d/00-ubuntuguard.conf",
     )
 
 

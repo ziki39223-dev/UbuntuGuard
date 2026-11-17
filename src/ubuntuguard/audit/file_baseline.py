@@ -14,7 +14,7 @@ DEFAULT_WATCHED_FILES = (
     "/etc/shadow",
     "/etc/sudoers",
     "/etc/ssh/sshd_config",
-    "/etc/ssh/sshd_config.d/99-ubuntuguard.conf",
+    "/etc/ssh/sshd_config.d/00-ubuntuguard.conf",
 )
 
 

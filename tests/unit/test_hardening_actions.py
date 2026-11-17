@@ -1,4 +1,4 @@
-﻿"""Hardening action tests (no real system changes)."""
+"""Hardening action tests (no real system changes)."""
 
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ def test_ssh_plan_and_apply(
     config: Config,
     fake_executor,
 ) -> None:
-    target = tmp_path / "sshd_config.d" / "99-ubuntuguard.conf"
+    target = tmp_path / "sshd_config.d" / "00-ubuntuguard.conf"
     action = SshHardeningAction(target)
     snapshot = make_snapshot(
         ssh=SshInfo(effective={"permitrootlogin": "yes"}, source="sshd -T")
@@ -70,7 +70,7 @@ def test_ssh_apply_skips_reload_when_service_is_inactive(
     config: Config,
     fake_executor,
 ) -> None:
-    target = tmp_path / "99-ubuntuguard.conf"
+    target = tmp_path / "00-ubuntuguard.conf"
     action = SshHardeningAction(target)
     snapshot = make_snapshot(
         ssh=SshInfo(effective={"passwordauthentication": "yes"}, source="sshd -T")
@@ -105,7 +105,7 @@ def test_ssh_invalid_config_is_not_verified(
     config: Config,
     fake_executor,
 ) -> None:
-    target = tmp_path / "99-ubuntuguard.conf"
+    target = tmp_path / "00-ubuntuguard.conf"
     action = SshHardeningAction(target)
     snapshot = make_snapshot(
         ssh=SshInfo(effective={"permitrootlogin": "no"}, source="sshd -T")
@@ -127,7 +127,7 @@ def test_ssh_plan_is_idempotent(
     make_snapshot: Callable[..., SystemSnapshot],
     config: Config,
 ) -> None:
-    target = tmp_path / "99-ubuntuguard.conf"
+    target = tmp_path / "00-ubuntuguard.conf"
     action = SshHardeningAction(target)
     snapshot = make_snapshot(ssh=SshInfo(effective={"a": "b"}, source="sshd -T"))
 
@@ -143,7 +143,7 @@ def test_sysctl_plan_and_apply(
     config: Config,
     fake_executor,
 ) -> None:
-    target = tmp_path / "99-ubuntuguard.conf"
+    target = tmp_path / "00-ubuntuguard.conf"
     action = SysctlHardeningAction(target)
     snapshot = make_snapshot(
         sysctl=SysctlInfo(values={"kernel.randomize_va_space": "2"})

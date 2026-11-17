@@ -86,7 +86,7 @@ core/
 强制约束：
 
 - 非 root 执行 apply / restore 直接拒绝（退出码 3）。
-- SSH 相关变更只写 `/etc/ssh/sshd_config.d/99-ubuntuguard.conf`，不修改主配置，保留既有会话。
+- SSH 相关变更只写 `/etc/ssh/sshd_config.d/00-ubuntuguard.conf`，不修改主配置，保留既有会话；`00-` 前缀用于在 sshd 的“首个取值生效”规则下优先于 `50-cloud-init.conf`。
 - 防火墙变更先追加 allow 规则再 enable，禁止一次性替换全部规则。
 - 变更前校验依赖（ufw / fail2ban / auditd / aide）存在，缺失返回退出码 8 而非静默跳过。
 

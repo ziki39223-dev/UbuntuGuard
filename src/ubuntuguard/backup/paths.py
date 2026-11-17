@@ -14,7 +14,7 @@ DEFAULT_BACKUP_PATHS: tuple[str, ...] = (
     "/etc/sudoers.d",
     "/etc/ssh/sshd_config",
     "/etc/ssh/sshd_config.d",
-    "/etc/ssh/sshd_config.d/99-ubuntuguard.conf",
+    "/etc/ssh/sshd_config.d/00-ubuntuguard.conf",
     "/etc/sysctl.d/99-ubuntuguard.conf",
     "/etc/fail2ban/jail.d",
     "/etc/fail2ban/jail.d/99-ubuntuguard.local",

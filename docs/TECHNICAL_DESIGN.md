@@ -180,7 +180,7 @@ notifications:
       "severity": "high",
       "category": "ssh",
       "evidence": {"path": "/etc/ssh/sshd_config", "line": 58, "value": "yes"},
-      "remediation": "Set PasswordAuthentication no in /etc/ssh/sshd_config.d/99-ubuntuguard.conf",
+      "remediation": "Set PasswordAuthentication no in /etc/ssh/sshd_config.d/00-ubuntuguard.conf",
       "references": ["CIS Ubuntu 24.04 5.2.4"]
     }
   ],
@@ -202,7 +202,7 @@ notifications:
 | ---- | ---- | ---- | ---- |
 | Python | 3.10 | 3.12 | 代码兼容 ≥3.10；禁用 3.11+ 独有语法 |
 | OpenSSH | 8.9p1 | 9.6p1 | `sshd -T` 字段差异；仅写 drop-in，不解析主配置改值 |
-| sshd 配置 | 主配置 + `sshd_config.d/*.conf` | 同 | 统一写 `99-ubuntuguard.conf` 保证覆盖优先级 |
+| sshd 配置 | 主配置 + `sshd_config.d/*.conf` | 同 | 统一写 `00-ubuntuguard.conf`：sshd 对同一关键字取首个值，按字典序先加载才不会被 50-cloud-init 等文件覆盖 |
 | UFW | 0.36.1 | 0.36.2 | `ufw status verbose` 输出解析需容错 |
 | Fail2ban | 0.11.2 | 1.0.2 | jail 配置与 backend 取值不同，按版本能力分支 |
 | Auditd | 3.0.7 | 3.1.2 | 规则语法一致；重载用 `service auditd restart`，必要时 `auditctl -R` 兜底 |
@@ -220,7 +220,7 @@ notifications:
 <backup.dir>/
 └── 20261117T100000Z-apply-ssh/
     ├── manifest.json          # schema_version、created_at、tool_version、items[]
-    ├── files/etc/ssh/sshd_config.d/99-ubuntuguard.conf
+    ├── files/etc/ssh/sshd_config.d/00-ubuntuguard.conf
     └── archive.tar.gz         # 开启压缩时生成
 ```
 

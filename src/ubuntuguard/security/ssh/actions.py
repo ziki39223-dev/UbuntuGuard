@@ -11,7 +11,9 @@ from ...core.executor import CommandExecutor
 from ...models import ActionResult, Change, ChangePlan, SystemSnapshot
 from ..hardening.base import HardeningAction
 
-DEFAULT_TARGET = Path("/etc/ssh/sshd_config.d/99-ubuntuguard.conf")
+# sshd keeps the first value it reads and includes sshd_config.d/*.conf in
+# lexical order, so the hardening drop-in must sort before distro/cloud files.
+DEFAULT_TARGET = Path("/etc/ssh/sshd_config.d/00-ubuntuguard.conf")
 
 # `sshd -T` prints "without-password" for the "prohibit-password" keyword.
 _VALUE_ALIASES = {

@@ -108,7 +108,7 @@ plan=$(cat "$out/harden-plan.txt")
 check_contains "plan previews ssh drop-in" "PasswordAuthentication no" "$plan"
 check_contains "plan previews ufw enable" "ufw --force enable" "$plan"
 check_contains "plan previews sysctl drop-in" "net.ipv4.tcp_syncookies" "$plan"
-if [[ -f /etc/ssh/sshd_config.d/99-ubuntuguard.conf ]]; then
+if [[ -f /etc/ssh/sshd_config.d/00-ubuntuguard.conf ]]; then
     bad "plan modified sshd config"
 else
     ok "plan did not modify sshd config"
@@ -119,7 +119,7 @@ echo "== harden apply =="
 ubuntuguard --yes harden apply --apply --only ssh,sysctl,firewall >"$out/harden-apply.txt" 2>&1
 rc=$?
 check_eq "harden apply exit code" "0" "$rc"
-sed -n '1,40p' "$out/harden-apply.txt"
+tail -n 12 "$out/harden-apply.txt"
 
 echo
 echo "== verification on the live system =="
@@ -151,8 +151,11 @@ fi
 echo
 echo "== detection =="
 if [[ "$auditd_state" == "active" ]]; then
-    auditctl -w /etc/sudoers -p wa -k ubuntuguard-integration >/dev/null 2>&1 || true
-    auditctl -w /etc/ssh -p wa -k ubuntuguard-integration >/dev/null 2>&1 || true
+    cat >/etc/audit/rules.d/99-ubuntuguard-integration.rules <<'EOF'
+-w /etc/sudoers -p wa -k ubuntuguard-integration
+-w /etc/ssh -p wa -k ubuntuguard-integration
+EOF
+    augenrules --load >/dev/null 2>&1 || true
 fi
 ubuntuguard --json detect --init-baseline >"$out/detect-init.json" 2>"$out/detect-init.err" || true
 ubuntuguard --json detect --fail-on critical >"$out/detect.json" 2>"$out/detect.err" || true
@@ -208,7 +211,7 @@ echo
 echo "== restore from pre-hardening snapshot =="
 ubuntuguard --json backup restore "$snapshot" --force >"$out/backup-restore.json" 2>"$out/backup-restore.err" || true
 check_eq "restore verified" "true" "$(jq -r '.verified' "$out/backup-restore.json" 2>/dev/null)"
-if [[ -f /etc/ssh/sshd_config.d/99-ubuntuguard.conf ]]; then
+if [[ -f /etc/ssh/sshd_config.d/00-ubuntuguard.conf ]]; then
     bad "ssh drop-in still present after restore"
 else
     ok "ssh drop-in removed after restore"
