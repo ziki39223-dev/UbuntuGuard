@@ -1,7 +1,7 @@
 # PROJECT_STATUS
 
 当前阶段：Phase 9（已完成并发布）
-状态：v1.0.0 已发布（双版本 CI 通过，GitHub Release 已创建）
+状态：v1.0.1 已发布（真实 systemd 集成验证通过，GitHub Release 已更新）
 最近更新：2026-11-17
 
 ## 阶段进度
@@ -17,7 +17,7 @@
 | Phase 6 | 系统健康监控 | 第 21～23 天 | 已完成 | 通过（proc/node_exporter 指标、阈值检查、Webhook；147 项单测） |
 | Phase 7 | 备份与恢复 | 第 24～26 天 | 已完成 | 通过（压缩、保留、校验、差异预检、恢复与演练；155 项单测） |
 | Phase 8 | 工程化与系统集成 | 第 27～29 天 | 已完成 | 通过（报告、systemd、deb 构建与安装/升级/卸载、CI、Ansible） |
-| Phase 9 | 最终测试与发布 | 第 30～35 天 | 已完成 | 双版本 164 项测试通过；CIS 映射完成；deb 安装/升级/卸载验证；GitHub Actions 双版本矩阵通过（deb 构建+冒烟）；v1.0.0 tag 与 Release 已发布 |
+| Phase 9 | 最终测试与发布 | 第 30～35 天 | 已完成 | 双版本 164 项测试通过；CIS 映射完成；deb 安装/升级/卸载验证；GitHub Actions 双版本矩阵、签名 APT 仓库、真实 systemd 集成（34 项断言）全部通过；v1.0.1 tag 与 Release 已发布 |
 
 ## 已完成模块
 
@@ -37,10 +37,11 @@
 | Phase 7 备份恢复 | `backup create/list/verify/restore/drill`：路径展开（文件/目录/glob）、可选 tar.gz 压缩、manifest + SHA256、保留策略（N 份 + 天数并集）、恢复前差异预览、恢复后复检、临时目录演练；155 项单测通过 |
 | Phase 8 工程化 | `report`（合并 JSON/自包含 HTML）、`export ansible`、`systemd install/uninstall`（4 个单元，audit 6h / monitor 5min）、debian/ 打包与安装脚本、GitHub Actions 双版本矩阵（ruff/mypy/pytest/wheel/deb）；162 项单测通过 |
 | Phase 9 实机验证 | 建立 WSL2 Ubuntu 22.04.5（3.10）与 24.04.4（3.12）环境；双版本 164 项测试 + ruff/mypy；实机 audit/detect/monitor/backup/harden/report；SSH 与 sysctl 加固生效校验及恢复；24.04 构建 deb 并完成安装/升级/卸载；Lynis 对照（47 项）；CIS 映射写入 `docs/CIS_MAPPING.md`；修复 sshd 别名、/run/sshd、备份缺失目标、deb 依赖与权限等问题 |
+| 发布与集成 | GPG 签名 APT 仓库（`scripts/build-apt-repo.sh`、`packaging/apt/`、GitHub Pages）；CI 三个任务（双版本矩阵、apt-repo 签名安装、真实 systemd 集成）；集成测试暴露并修复 SSH drop-in 被 cloud-init 覆盖（99→00）与 sshd 未运行时 reload 失败，发布 v1.0.1 |
 
 ## 进行中
 
-无。v1.0.0 已发布：https://github.com/ziki39223-dev/UbuntuGuard/releases/tag/v1.0.0
+无。v1.0.1 已发布：https://github.com/ziki39223-dev/UbuntuGuard/releases/tag/v1.0.1
 
 ## 后续可选事项
 

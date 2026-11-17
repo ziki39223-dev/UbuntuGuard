@@ -19,7 +19,7 @@
 | R-015 | 加固执行依赖真实命令（`sshd -t`、`ufw`、`systemctl`）的环境差异 | 校验失败或误判 | 中 | 校验失败一律视为未验证并触发回滚；Phase 9 在 22.04/24.04 实机验证 | 已缓解（双版本实机通过） |
 | R-016 | auth.log 轮转或权限不足导致登录分析窗口有限/不可读 | 漏报暴力破解 | 中 | journalctl 兜底；不可读时在报告 skipped 中明示；README 建议以 root 或 adm 组成员运行 | 已缓解（实现层面） |
 | R-017 | deb 打包与 CI 未在真实 Ubuntu 环境运行，pybuild/debhelper 细节可能失败 | 无法交付安装包 | 高 | Phase 9 首次运行 CI 修复构建问题；debian/rules 与脚本权限在 CI 中显式 chmod | 已缓解（24.04 构建/安装/卸载通过；22.04 用源码安装） |
-| R-018 | WSL2 与真实服务器存在差异（auditd 无法启动、AIDE 未初始化、UFW/公网暴露未覆盖） | 部分规则与加固在真机行为不同 | 中 | 已记录为未覆盖项；建议在真实云主机或 VirtualBox 再做一轮 Phase 9 验证 | 未处理 |
+| R-018 | WSL2 与真实服务器存在差异（auditd 无法启动、AIDE 未初始化、UFW/公网暴露未覆盖） | 部分规则与加固在真机行为不同 | 中 | 新增 GitHub Runner 集成测试（`scripts/integration-test.sh`，真实 systemd + auditd/AIDE/UFW + sshd），34 项断言通过；公网暴露与云厂商镜像差异仍需真机复核 | 已缓解（部分；公网场景未覆盖） |
 | R-019 | 仓库签名私钥泄露或丢失，导致仓库被伪造或无法继续发布 | 分发链被污染 | 高 | 私钥仅存于 WSL 与本机备份（0600），不入库；撤销证书保留在 `~/.gnupg/openpgp-revocs.d`；轮换流程写入 docs/PACKAGE_SIGNING.md | 已缓解（流程 + 文档） |
 
 等级说明：高=可能导致主机失联或数据不可恢复；中=功能失效或误导；低=资源与运维负担。

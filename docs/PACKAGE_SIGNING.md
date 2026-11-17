@@ -33,7 +33,7 @@ apt-repo/
 ├── dists/jammy/main/binary-amd64/{Packages,Packages.gz}
 ├── dists/noble/{InRelease,Release,Release.gpg}
 ├── dists/noble/main/binary-amd64/{Packages,Packages.gz}
-├── pool/main/u/ubuntuguard/ubuntuguard_1.0.0-1_all.deb
+├── pool/main/u/ubuntuguard/ubuntuguard_1.0.1-1_all.deb
 └── ubuntuguard-archive-keyring.{gpg,asc}
 ```
 
@@ -87,7 +87,7 @@ gpg --verify dist/apt-repo/dists/noble/Release.gpg dist/apt-repo/dists/noble/Rel
 sudo apt update   # 出现 Get:… InRelease 且无 NO_PUBKEY/Hash Sum mismatch
 ```
 
-Phase 9 已在 WSL 24.04 完成端到端验证：`file:` 源导入公钥后 `apt update` 正常，`apt install ubuntuguard` 得到 1.0.0；手动篡改 `Packages` 后 `apt update` 立即报哈希不匹配。
+Phase 9 已在 WSL 24.04 完成端到端验证：`file:` 源导入公钥后 `apt update` 正常，`apt install ubuntuguard` 安装成功；手动篡改 `Packages` 后 `apt update` 立即报哈希不匹配。
 
 ## 密钥轮换与撤销
 

@@ -6,7 +6,7 @@
 
 面向 Ubuntu 22.04 / 24.04 的自动化安全运维与主机健康保障 CLI 工具。
 
-当前版本：**v1.0.0**。收集 → 审计 → 加固 → 检测 → 监控 → 备份 → 报告全链路可用；40 条规则对齐 CIS，加固支持快照、生效校验与回滚。
+当前版本：**v1.0.1**。收集 → 审计 → 加固 → 检测 → 监控 → 备份 → 报告全链路可用；40 条规则对齐 CIS，加固支持快照、生效校验与回滚。
 
 ## 设计边界
 
@@ -32,7 +32,7 @@ sudo apt update && sudo apt install ubuntuguard
 python3 -m pip install -e ".[dev]"
 
 # 3. 离线 deb（Release 附件）
-sudo apt install ./ubuntuguard_1.0.0-1_all.deb
+sudo apt install ./ubuntuguard_1.0.1-1_all.deb
 ```
 
 仓库元数据使用 GPG 签名（`InRelease`），生成、发布与密钥轮换流程见 [docs/PACKAGE_SIGNING.md](docs/PACKAGE_SIGNING.md)。要求 Python ≥ 3.10，运行期仅依赖 PyYAML；HTML 报告使用内置渲染器，无需模板引擎。
@@ -50,6 +50,7 @@ wsl -d UbuntuGuard-24.04 -- bash -lc "cd /root/UbuntuGuard && /root/venv/bin/pyt
 - `UbuntuGuard-24.04`：Ubuntu 24.04.4，Python 3.12.3
 - 两个环境均已启用 systemd，并安装 openssh-server / ufw / fail2ban / auditd / aide
 - 项目副本：`/root/UbuntuGuard`；虚拟环境：`/root/venv`
+- CI 的 `integration` 任务在 GitHub Runner（真实 systemd）上启用 auditd/AIDE/UFW，执行 `scripts/integration-test.sh` 的 34 项端到端断言
 
 ## 使用
 

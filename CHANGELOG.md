@@ -2,6 +2,17 @@
 
 格式参考 Keep a Changelog，版本遵循语义化版本。
 
+## [1.0.1] - 2026-11-17
+
+### Fixed
+
+- **SSH 加固云端失效**：sshd 对同一关键字取首个值并按字典序加载 `sshd_config.d/*.conf`，原 `99-ubuntuguard.conf` 会被 `50-cloud-init.conf` 覆盖，导致生效校验失败并回滚。改为 `00-ubuntuguard.conf`，同步更新备份路径、文件基线与 Ansible 导出。
+- **sshd 未运行时加固失败**：改为仅在服务 active 时 `systemctl reload ssh`，否则直接校验配置文件有效性；回滚同理。避免在未启用 SSH 的主机上误判失败。
+
+### Added
+
+- `scripts/integration-test.sh` 与 CI `integration` 任务：在 GitHub Runner（真实 systemd）启用 ufw/auditd/AIDE/sshd，执行 34 项端到端断言（审计→备份→加固→生效校验→检测→监控→systemd 单元→恢复→报告）。
+
 ## [1.0.0] - 2026-11-17
 
 ### Added
