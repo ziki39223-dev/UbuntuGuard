@@ -82,6 +82,17 @@ Seven views share the same CLI: overview, audit, hardening, detection, monitorin
 
 The top bar switches between dark/light themes and Chinese/English labels; both preferences are stored in `localStorage`. Technical data (finding titles, evidence, commands) stays in its original language.
 
+To run it persistently, install the systemd unit manually (the deb does not enable it by default):
+
+```bash
+sudo cp packaging/systemd/ubuntuguard-web.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now ubuntuguard-web
+sudo systemctl status ubuntuguard-web
+```
+
+The unit binds to `127.0.0.1:8080`. For remote access use an SSH tunnel or an authenticated reverse proxy; do not expose the port directly.
+
 ## Configuration
 
 Default path: `/etc/ubuntuguard/config.yaml`, overridable with `--config` or `UBUNTUGUARD_CONFIG`. Built-in defaults are used when the file is absent. Example: [configs/config.example.yaml](configs/config.example.yaml).

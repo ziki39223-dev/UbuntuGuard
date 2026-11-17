@@ -114,6 +114,17 @@ sudo ubuntuguard web --port 8080
 
 实现只使用标准库 `http.server`，默认绑定本地回环地址，不引入 Flask/FastAPI。POST 动作需要页面内注入的随机 token，确认类操作额外要求输入 `APPLY`。**控制台没有登录认证，不要直接暴露到公网**；在 WSL 中从 Windows 浏览器访问演示时可临时使用 `--host 0.0.0.0`，仅限本机。
 
+需要常驻运行时，可手动安装仓库内的 systemd 单元（默认不随 deb 自动启用）：
+
+```bash
+sudo cp packaging/systemd/ubuntuguard-web.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now ubuntuguard-web
+sudo systemctl status ubuntuguard-web
+```
+
+服务只监听 `127.0.0.1:8080`；远程访问请用 SSH 隧道或带认证的反向代理，不要直接开放端口。
+
 ## 配置
 
 默认路径 `/etc/ubuntuguard/config.yaml`，可用 `--config` 或环境变量 `UBUNTUGUARD_CONFIG` 覆盖；文件缺失时使用内置默认值。
