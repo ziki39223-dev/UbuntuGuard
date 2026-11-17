@@ -9,6 +9,7 @@
 - 项目目录骨架（src / tests / scripts / configs / systemd / packaging / docs / examples）
 - 项目管理文档：PROJECT_STATUS、ROADMAP、ARCHITECTURE、DECISIONS、TEST_REPORT、RISK_REGISTER
 - 采用 MIT 许可证（LICENSE + pyproject license 元数据）
+- 发布与签名：项目专用 GPG 密钥、`scripts/build-apt-repo.sh` 生成带 `InRelease`/`Release.gpg` 的 APT 仓库、`packaging/apt/`（公钥与 deb822 源）、`docs/PACKAGE_SIGNING.md`；仓库产物发布到 `gh-pages`（GitHub Pages）；CI 新增 `apt-repo` 任务验证签名与 `apt install`
 - Phase 0 定稿：
   - ARCHITECTURE.md 架构设计（分层、核心抽象、数据流、安全边界、兼容策略）
   - docs/TECHNICAL_DESIGN.md 技术方案（CLI 规范与退出码、YAML 配置 schema、日志规范、报告 schema、风险评分、22.04/24.04 差异清单、备份布局、权限模型、打包与测试策略）

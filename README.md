@@ -21,14 +21,21 @@ UbuntuGuard 不重写审计引擎、监控栈与 IDS：
 ## 安装
 
 ```bash
-# 源码
+# 1. 签名 APT 仓库（22.04 用 jammy，24.04 用 noble）
+sudo curl -fsSL https://ziki39223-dev.github.io/UbuntuGuard/ubuntuguard-archive-keyring.gpg \
+  -o /usr/share/keyrings/ubuntuguard-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/ubuntuguard-archive-keyring.gpg] https://ziki39223-dev.github.io/UbuntuGuard noble main" \
+  | sudo tee /etc/apt/sources.list.d/ubuntuguard.list
+sudo apt update && sudo apt install ubuntuguard
+
+# 2. 源码
 python3 -m pip install -e ".[dev]"
 
-# deb（Ubuntu 24.04，从 Release 下载）
+# 3. 离线 deb（Release 附件）
 sudo apt install ./ubuntuguard_1.0.0-1_all.deb
 ```
 
-要求 Python ≥ 3.10，运行期仅依赖 PyYAML；HTML 报告使用内置渲染器，无需模板引擎。
+仓库元数据使用 GPG 签名（`InRelease`），生成、发布与密钥轮换流程见 [docs/PACKAGE_SIGNING.md](docs/PACKAGE_SIGNING.md)。要求 Python ≥ 3.10，运行期仅依赖 PyYAML；HTML 报告使用内置渲染器，无需模板引擎。
 
 ## 测试环境（本机 WSL2）
 
@@ -121,6 +128,7 @@ dpkg-buildpackage -us -uc -b
 | [docs/TECHNICAL_DESIGN.md](docs/TECHNICAL_DESIGN.md) | CLI / 配置 / 报告规范、兼容性、CI |
 | [docs/ECOSYSTEM_AND_POSITIONING.md](docs/ECOSYSTEM_AND_POSITIONING.md) | 生态调研与差异化定位 |
 | [docs/CIS_MAPPING.md](docs/CIS_MAPPING.md) | 40 条规则与 CIS 控制编号对照 |
+| [docs/PACKAGE_SIGNING.md](docs/PACKAGE_SIGNING.md) | GPG 签名密钥、APT 仓库构建与发布 |
 | [ROADMAP.md](ROADMAP.md) | 阶段任务清单 |
 | [PROJECT_STATUS.md](PROJECT_STATUS.md) | 当前进度 |
 | [RISK_REGISTER.md](RISK_REGISTER.md) | 风险与应对 |

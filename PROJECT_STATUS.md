@@ -46,7 +46,7 @@
 
 1. 在真实云主机补一轮 UFW/auditd/公网暴露验证（R-018）。
 2. 关注 CIS 官方 PDF 版本更新，按需复核 `docs/CIS_MAPPING.md`。
-3. 视需要补充 deb 签名与 PPA 发布。
+3. 如需 Launchpad PPA，可基于现有源码用 `dpkg-buildpackage -S -sa -k<指纹>` 生成 `.dsc`/`.changes` 后 `dput` 上传。
 
 ## 待维护文档
 

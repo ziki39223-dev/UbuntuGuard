@@ -134,3 +134,10 @@
 - 决策：使用 WSL2 导入 Ubuntu 22.04.5 / 24.04.4 Base 镜像作为验证环境；deb 构建固定在 Ubuntu 24.04（setuptools ≥ 68），22.04 使用源码/venv 安装。
 - 理由：Windows 主机无管理员权限与虚拟化软件，WSL2 可提供真实 systemd、sshd、UFW、sysctl；22.04 的 setuptools 59 不支持 PEP 621，无法直接构建同一 `pyproject.toml`。
 - 影响：测试环境位于 `C:\Users\ziki3\WSL\UbuntuGuard-*`，项目副本在 `/root/UbuntuGuard`；WSL 与真机差异（auditd/AIDE/网络暴露）记录为 R-018。
+
+## D-020 采用元数据签名的自建 APT 仓库，不使用 Launchpad PPA
+
+- 日期：2026-11-17
+- 决策：用项目专用 GPG 密钥（RSA 4096，仅签名用途）对 `dists/<codename>/Release` 生成 `InRelease` 与 `Release.gpg`，仓库产物发布到 `gh-pages` 分支并通过 GitHub Pages 提供；不逐包 `dpkg-sig`，不依赖 Launchpad 账号。
+- 理由：APT 只信任仓库元数据签名，`.deb` 由 `Release` 中的 SHA256 覆盖，逐包签名已废弃；自建仓库可在本地完成端到端验证（导入公钥、apt update、安装、篡改检测），无需外部账号审批。
+- 影响：新增 `scripts/build-apt-repo.sh`、`packaging/apt/`、`docs/PACKAGE_SIGNING.md`；CI 增加 `apt-repo` 任务，用临时密钥构建签名仓库并实际 `apt install` 验证。私钥不入库，仅保存在 WSL 与本机备份（R-019）。

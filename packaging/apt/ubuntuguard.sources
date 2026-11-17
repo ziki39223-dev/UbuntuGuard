@@ -1,0 +1,6 @@
+Types: deb
+URIs: https://ziki39223-dev.github.io/UbuntuGuard
+Suites: noble
+Components: main
+Architectures: amd64
+Signed-By: /usr/share/keyrings/ubuntuguard-archive-keyring.gpg
