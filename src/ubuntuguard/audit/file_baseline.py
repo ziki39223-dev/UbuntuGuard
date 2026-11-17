@@ -42,7 +42,11 @@ class FileBaseline:
             path = Path(raw)
             if not path.is_file():
                 continue
-            entries[raw] = _sha256(path)
+            try:
+                entries[raw] = _sha256(path)
+            except OSError:
+                # Unreadable files (for example /etc/shadow as non-root) are skipped.
+                continue
         payload = {
             "schema_version": 1,
             "created_at": datetime.now(tz=timezone.utc)
@@ -69,7 +73,11 @@ class FileBaseline:
                     FileChange(path=raw, status="missing", old_sha256=expected)
                 )
                 continue
-            current = _sha256(path)
+            try:
+                current = _sha256(path)
+            except OSError:
+                # Cannot read the file, so no trustworthy comparison is possible.
+                continue
             if current != expected:
                 changes.append(
                     FileChange(
@@ -85,11 +93,15 @@ class FileBaseline:
                 continue
             path = Path(raw)
             if path.is_file():
+                try:
+                    digest = _sha256(path)
+                except OSError:
+                    continue
                 changes.append(
                     FileChange(
                         path=raw,
                         status="added",
-                        new_sha256=_sha256(path),
+                        new_sha256=digest,
                     )
                 )
         return tuple(changes)

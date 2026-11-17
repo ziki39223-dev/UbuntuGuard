@@ -240,11 +240,7 @@ def cmd_detect(
 ) -> int:
     timeout = float(config.get("general.timeout_seconds", 30))
     executor = CommandExecutor(timeout=timeout)
-    state_dir = None
-    if os.name == "posix":
-        state_dir = Path(
-            str(config.get("general.state_dir", "/var/lib/ubuntuguard"))
-        )
+    state_dir = _writable_state_dir(config)
 
     result = run_detection(
         executor,
@@ -285,11 +281,7 @@ def cmd_monitor(
     timeout = float(config.get("general.timeout_seconds", 30))
     executor = CommandExecutor(timeout=timeout)
     metrics = collect_metrics(config, executor)
-    state_dir = None
-    if os.name == "posix":
-        state_dir = Path(
-            str(config.get("general.state_dir", "/var/lib/ubuntuguard"))
-        )
+    state_dir = _writable_state_dir(config)
 
     report = evaluate_health(metrics, config, state_dir)
     payload = build_monitoring_report(report)
@@ -534,6 +526,22 @@ def _diff_dict(item: FileDiff) -> dict[str, object]:
     }
 
 
+def _writable_state_dir(config: Config) -> Path | None:
+    if os.name != "posix":
+        return None
+    path = Path(str(config.get("general.state_dir", "/var/lib/ubuntuguard")))
+    try:
+        path.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        print(
+            f"ubuntuguard: warning: state directory unavailable ({exc}); "
+            "baseline and events disabled",
+            file=sys.stderr,
+        )
+        return None
+    return path
+
+
 def cmd_report(
     config: Config,
     as_json: bool,
@@ -545,13 +553,11 @@ def cmd_report(
     snapshot = collect_system(executor)
     audit_result = run_audit(snapshot, config)
 
-    state_dir = None
-    if os.name == "posix":
-        state_dir = Path(
-            str(config.get("general.state_dir", "/var/lib/ubuntuguard"))
-        )
+    state_dir = _writable_state_dir(config)
     detection = run_detection(executor, config, state_dir=state_dir)
-    health = evaluate_health(collect_metrics(config, executor), config, state_dir)
+    health = evaluate_health(
+        collect_metrics(config, executor), config, state_dir
+    )
 
     host = snapshot.host
     payload = {
