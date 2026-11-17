@@ -6,7 +6,7 @@
 
 面向 Ubuntu 22.04 / 24.04 的自动化安全运维与主机健康保障 CLI 工具。
 
-当前版本：**v1.0.1**。收集 → 审计 → 加固 → 检测 → 监控 → 备份 → 报告全链路可用；40 条规则对齐 CIS，加固支持快照、生效校验与回滚。
+当前版本：**v1.0.2**。收集 → 审计 → 加固 → 检测 → 监控 → 备份 → 报告全链路可用；40 条规则对齐 CIS，加固支持快照、生效校验与回滚。已在阿里云 Ubuntu 22.04 公网实例完成端到端验证。
 
 ## 设计边界
 
@@ -21,18 +21,18 @@ UbuntuGuard 不重写审计引擎、监控栈与 IDS：
 ## 安装
 
 ```bash
-# 1. 签名 APT 仓库（22.04 用 jammy，24.04 用 noble）
+# 1. 签名 APT 仓库（当前提供 noble / Ubuntu 24.04 包）
 sudo curl -fsSL https://ziki39223-dev.github.io/UbuntuGuard/ubuntuguard-archive-keyring.gpg \
   -o /usr/share/keyrings/ubuntuguard-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/ubuntuguard-archive-keyring.gpg] https://ziki39223-dev.github.io/UbuntuGuard noble main" \
   | sudo tee /etc/apt/sources.list.d/ubuntuguard.list
 sudo apt update && sudo apt install ubuntuguard
 
-# 2. 源码
-python3 -m pip install -e ".[dev]"
+# 2. 源码 / 虚拟环境（22.04 与 24.04 均可）
+python3 -m venv /opt/ug && /opt/ug/bin/pip install "git+https://github.com/ziki39223-dev/UbuntuGuard.git@v1.0.2"
 
-# 3. 离线 deb（Release 附件）
-sudo apt install ./ubuntuguard_1.0.1-1_all.deb
+# 3. 离线 deb（Release 附件，Ubuntu 24.04）
+sudo apt install ./ubuntuguard_1.0.2-1_all.deb
 ```
 
 仓库元数据使用 GPG 签名（`InRelease`），生成、发布与密钥轮换流程见 [docs/PACKAGE_SIGNING.md](docs/PACKAGE_SIGNING.md)。要求 Python ≥ 3.10，运行期仅依赖 PyYAML；HTML 报告使用内置渲染器，无需模板引擎。

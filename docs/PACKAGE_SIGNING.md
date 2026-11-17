@@ -20,7 +20,7 @@ UbuntuGuard 采用 **APT 仓库元数据签名**：用 GPG 对 `dists/<codename>
 依赖：`dpkg-dev`（`dpkg-scanpackages`）、`apt-utils`（`apt-ftparchive`）、`gnupg`。
 
 ```bash
-# 从 dist/ 下的 .deb 构建，输出到 dist/apt-repo（默认同时生成 jammy 与 noble）
+# 从 dist/ 下的 .deb 构建，输出到 dist/apt-repo（默认生成 noble）
 GPG_KEY_ID=8BF8FCCAED0FBB4143551C962ED6CE4E611E22A9 \
   scripts/build-apt-repo.sh --pool dist --out dist/apt-repo
 ```
@@ -29,15 +29,15 @@ GPG_KEY_ID=8BF8FCCAED0FBB4143551C962ED6CE4E611E22A9 \
 
 ```text
 apt-repo/
-├── dists/jammy/{InRelease,Release,Release.gpg}
-├── dists/jammy/main/binary-amd64/{Packages,Packages.gz}
 ├── dists/noble/{InRelease,Release,Release.gpg}
 ├── dists/noble/main/binary-amd64/{Packages,Packages.gz}
-├── pool/main/u/ubuntuguard/ubuntuguard_1.0.1-1_all.deb
+├── pool/main/u/ubuntuguard/ubuntuguard_1.0.2-1_all.deb
 └── ubuntuguard-archive-keyring.{gpg,asc}
 ```
 
-脚本参数：`--pool DIR` 指定 .deb 目录，`--out DIR` 指定仓库根，`--codename NAME` 可重复指定发行版代号（默认 `jammy noble`）。退出码沿用项目约定：缺工具返回 8，无 .deb 或参数错误返回 1/2。
+> 仓库只提供 noble 包：noble 构建的 deb 会安装到 `/usr/lib/python3.12/dist-packages`，Ubuntu 22.04 的 Python 3.10 无法导入，因此 22.04 请使用源码/venv 安装。
+
+脚本参数：`--pool DIR` 指定 .deb 目录，`--out DIR` 指定仓库根，`--codename NAME` 可重复指定发行版代号（默认 `noble`）。退出码沿用项目约定：缺工具返回 8，无 .deb 或参数错误返回 1/2。
 
 ## 发布到 GitHub Pages
 
@@ -70,7 +70,7 @@ sudo cp packaging/apt/ubuntuguard.sources /etc/apt/sources.list.d/ubuntuguard.so
 sudo apt update && sudo apt install ubuntuguard
 ```
 
-单行 sources 写法（22.04 同样可用，把 `noble` 换成 `jammy`）：
+单行 sources 写法（仅 noble；22.04 使用源码/venv）：
 
 ```text
 deb [signed-by=/usr/share/keyrings/ubuntuguard-archive-keyring.gpg] \

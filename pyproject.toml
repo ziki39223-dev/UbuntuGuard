@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ubuntuguard"
-version = "1.0.1"
+version = "1.0.2"
 description = "Ubuntu security baseline audit and reversible hardening CLI"
 readme = "README.md"
 requires-python = ">=3.10"

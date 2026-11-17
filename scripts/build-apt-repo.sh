@@ -7,7 +7,7 @@
 # Options:
 #   --pool DIR        directory containing *.deb (default: dist)
 #   --out DIR         repository root to create (default: dist/apt-repo)
-#   --codename NAME   distribution codename, repeatable (default: jammy noble)
+#   --codename NAME   distribution codename, repeatable (default: noble)
 #
 # Environment:
 #   GPG_KEY_ID   signing key fingerprint or key ID (required)
@@ -34,7 +34,7 @@ if [[ -z "${GPG_KEY_ID:-}" ]]; then
     exit 2
 fi
 if [[ ${#codenames[@]} -eq 0 ]]; then
-    codenames=(jammy noble)
+    codenames=(noble)
 fi
 
 command -v dpkg-scanpackages >/dev/null || { echo "dpkg-scanpackages not found (dpkg-dev)" >&2; exit 8; }

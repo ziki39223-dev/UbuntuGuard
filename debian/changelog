@@ -1,3 +1,11 @@
+ubuntuguard (1.0.2-1) unstable; urgency=medium
+
+  * Accept systemd-style minute intervals (5min/15mins) in systemd install.
+  * Publish the APT repository for noble only; Ubuntu 22.04 can install from
+    source or a virtualenv until a jammy build is available.
+
+ -- UbuntuGuard Maintainer <maintainer@example.invalid>  Tue, 17 Nov 2026 15:00:00 +0800
+
 ubuntuguard (1.0.1-1) unstable; urgency=medium
 
   * Fix SSH hardening precedence: write sshd_config.d/00-ubuntuguard.conf so

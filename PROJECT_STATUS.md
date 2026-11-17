@@ -1,7 +1,7 @@
 # PROJECT_STATUS
 
 当前阶段：Phase 9（已完成并发布）
-状态：v1.0.1 已发布（真实 systemd 集成验证通过，GitHub Release 已更新）
+状态：v1.0.2 已发布（阿里云 ECS 公网验证通过，GitHub Release 已更新）
 最近更新：2026-11-17
 
 ## 阶段进度
@@ -37,15 +37,16 @@
 | Phase 7 备份恢复 | `backup create/list/verify/restore/drill`：路径展开（文件/目录/glob）、可选 tar.gz 压缩、manifest + SHA256、保留策略（N 份 + 天数并集）、恢复前差异预览、恢复后复检、临时目录演练；155 项单测通过 |
 | Phase 8 工程化 | `report`（合并 JSON/自包含 HTML）、`export ansible`、`systemd install/uninstall`（4 个单元，audit 6h / monitor 5min）、debian/ 打包与安装脚本、GitHub Actions 双版本矩阵（ruff/mypy/pytest/wheel/deb）；162 项单测通过 |
 | Phase 9 实机验证 | 建立 WSL2 Ubuntu 22.04.5（3.10）与 24.04.4（3.12）环境；双版本 164 项测试 + ruff/mypy；实机 audit/detect/monitor/backup/harden/report；SSH 与 sysctl 加固生效校验及恢复；24.04 构建 deb 并完成安装/升级/卸载；Lynis 对照（47 项）；CIS 映射写入 `docs/CIS_MAPPING.md`；修复 sshd 别名、/run/sshd、备份缺失目标、deb 依赖与权限等问题 |
-| 发布与集成 | GPG 签名 APT 仓库（`scripts/build-apt-repo.sh`、`packaging/apt/`、GitHub Pages）；CI 三个任务（双版本矩阵、apt-repo 签名安装、真实 systemd 集成）；集成测试暴露并修复 SSH drop-in 被 cloud-init 覆盖（99→00）与 sshd 未运行时 reload 失败，发布 v1.0.1 |
+| 发布与集成 | GPG 签名 APT 仓库（`scripts/build-apt-repo.sh`、`packaging/apt/`、GitHub Pages）；CI 三个任务（双版本矩阵、apt-repo 签名安装、真实 systemd 集成）；集成测试暴露并修复 SSH drop-in 被 cloud-init 覆盖（99→00）、sshd 未运行时 reload 失败、`systemd install` 拒绝 `5min`，发布 v1.0.2 |
+| 公有云验证 | 阿里云 ECS（Ubuntu 22.04.5，公网 IP）：34 项集成断言全部通过；加固前后 findings 16→10；公网扫描仅 22 开放；修复 jammy 仓库不兼容包（仓库改为 noble-only，22.04 用 venv）；R-018 关闭 |
 
 ## 进行中
 
-无。v1.0.1 已发布：https://github.com/ziki39223-dev/UbuntuGuard/releases/tag/v1.0.1
+无。v1.0.2 已发布：https://github.com/ziki39223-dev/UbuntuGuard/releases/tag/v1.0.2
 
 ## 后续可选事项
 
-1. 在真实云主机补一轮公网暴露（SSH 端口、安全组）与云厂商镜像验证；ufw/auditd/AIDE 行为已由 CI 集成任务覆盖（R-018）。
+1. 如需覆盖云厂商 24.04 镜像，再开一台 Ubuntu 24.04 云主机复跑集成脚本。
 2. 关注 CIS 官方 PDF 版本更新，按需复核 `docs/CIS_MAPPING.md`。
 3. 如需 Launchpad PPA，可基于现有源码用 `dpkg-buildpackage -S -sa -k<指纹>` 生成 `.dsc`/`.changes` 后 `dput` 上传。
 
