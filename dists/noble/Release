@@ -1,24 +1,24 @@
 Architectures: amd64
 Codename: noble
 Components: main
-Date: Tue, 17 Nov 2026 03:41:53 +0000
+Date: Tue, 17 Nov 2026 04:12:14 +0000
 Description: UbuntuGuard APT repository
 Label: UbuntuGuard
 Origin: UbuntuGuard
 Suite: noble
 MD5Sum:
- e9ade2903cd23cfa5bd8db9b8603b9ba              184 Release
- 3941a398476d481367a6ac9aaa20b855              789 main/binary-amd64/Packages
- d466b238278b527074837b0605f6573f              518 main/binary-amd64/Packages.gz
+ beb710f74124acde1a03357d132569ef              184 Release
+ 281f81d5e8ab6c1116c83b6669ed7328             1578 main/binary-amd64/Packages
+ 5d600df19cf30d4ca23845985cb4f705              643 main/binary-amd64/Packages.gz
 SHA1:
- 7a058e67f24732c6768c66ed44d6c347a76d3c5a              184 Release
- 351dd1df38c5f4d9124599a7eb1996838779bf3d              789 main/binary-amd64/Packages
- 56742347b4b0c6920bf1c1d90ecfa97c75639df9              518 main/binary-amd64/Packages.gz
+ a577acd09bfd368e82d9022ef797d3fc8b360a84              184 Release
+ bdad668a1615868c598154afae8ecf3dabf21096             1578 main/binary-amd64/Packages
+ 77d04702382c6f1e13ae793890a07f65e06cd22a              643 main/binary-amd64/Packages.gz
 SHA256:
- dbdfdf42fc64c95edf91336384d1744fd6e1c2cdc06448b6cc924d5497a1ef58              184 Release
- 5d695a3e4d6730e5e8802f5fcedf1cce9fa92f0cd13ce5cebae755b9b57a8ced              789 main/binary-amd64/Packages
- 0e17b09bcb3d7f20388d00bc46eb2117566d1e396f6ac54aaabea047f9f74784              518 main/binary-amd64/Packages.gz
+ 741930d3fdafe847c05aaa99fbbfa8128bcb7fbd8650a525c543d27293d33372              184 Release
+ 36b2ca84b56b395b61b5798c2d09b649edb7fdd44eac18996c3a76883489567d             1578 main/binary-amd64/Packages
+ 6d548b62c5ceb7755830f3b42b79bec756995560a9b305fdcce337cc72267477              643 main/binary-amd64/Packages.gz
 SHA512:
- 724729dd9da0866ef5b8ca6c1177f88e917bb783c16fd9af4dc10e2c4248dada87486f030a9bf4cc4859ccad2e78e7f06d55823e375c79a0ae6145271bff47e6              184 Release
- 7fe8b0504e69d11d74947ee257ed15074f367814bdf8f261944153a8793edaa0176b318ce16325742d1124dc3a4d00941ed88e70e41aad244110af1453aaf255              789 main/binary-amd64/Packages
- 624c5fc3cd90121d4ac3e69e862c17cf76a4499fc60dfe22d3ef201c5aa782f76ac143e61bbbfd63967e2b20300226a647429757e32cc2bfaa02278a0eba9d70              518 main/binary-amd64/Packages.gz
+ 438b423912a224ec793a46e6245475e54578db86350d005a0d4dde3d0c02cba41b52d47a8df14338090a0d1a89b268d0a8478bfd9660442c1035200a2a77b539              184 Release
+ 89856c6b618c5c19c23f7cc391d621864d7e8abd56a2df222d94684d192817146c7507d8675897d94d35c735b81e3a1f7da62a26aed03f0266a1fc2090d88ee8             1578 main/binary-amd64/Packages
+ d642e46b965a7c910e3d9aacda343d37e7241ca3e5973830df6ef5b2fa36e1e2a87587bc3a748813c5c2870bc2c8b42f5a3c98bf22af2a9cfa5484758e1f7802              643 main/binary-amd64/Packages.gz
