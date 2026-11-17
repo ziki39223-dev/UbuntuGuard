@@ -9,7 +9,7 @@ from ..core.executor import CommandExecutor
 
 UNIT_DIR = Path("/etc/systemd/system")
 DEFAULT_BINARY = "/usr/bin/ubuntuguard"
-_INTERVAL_RE = re.compile(r"^\d+[smhd]$")
+_INTERVAL_RE = re.compile(r"^\d+(?:s|m|min|mins|h|d)$")
 
 AUDIT_SERVICE = """\
 [Unit]

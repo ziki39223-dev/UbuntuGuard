@@ -645,7 +645,7 @@ def cmd_systemd(
         if value and not valid_interval(value):
             print(
                 f"ubuntuguard: error: invalid interval: {value!r} "
-                "(expected e.g. 30m, 6h, 1d)",
+                "(expected e.g. 5min, 30m, 6h, 1d)",
                 file=sys.stderr,
             )
             return int(ExitCode.USAGE)

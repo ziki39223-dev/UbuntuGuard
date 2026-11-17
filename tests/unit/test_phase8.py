@@ -112,10 +112,12 @@ def test_systemd_install_and_uninstall(tmp_path: Path, fake_executor) -> None:
 
 
 def test_valid_interval() -> None:
-    assert valid_interval("5min") is False
+    assert valid_interval("5min") is True
+    assert valid_interval("15mins") is True
     assert valid_interval("6h") is True
     assert valid_interval("30m") is True
     assert valid_interval("abc") is False
+    assert valid_interval("5") is False
 
 
 def test_cli_report_files(tmp_path: Path, capsys) -> None:
