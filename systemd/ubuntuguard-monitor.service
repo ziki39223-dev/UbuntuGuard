@@ -1,0 +1,8 @@
+[Unit]
+Description=UbuntuGuard health check
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/ubuntuguard monitor check
+Nice=10

@@ -1,0 +1,5 @@
+systemd/ubuntuguard-audit.service lib/systemd/system/
+systemd/ubuntuguard-audit.timer lib/systemd/system/
+systemd/ubuntuguard-monitor.service lib/systemd/system/
+systemd/ubuntuguard-monitor.timer lib/systemd/system/
+configs/config.example.yaml etc/ubuntuguard/

@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ]; then
+    systemctl disable --now ubuntuguard-audit.timer ubuntuguard-monitor.timer || true
+fi
+
+#DEBHELPER#
+
+exit 0

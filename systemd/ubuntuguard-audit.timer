@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the UbuntuGuard security report periodically
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=6h
+Persistent=true
+Unit=ubuntuguard-audit.service
+
+[Install]
+WantedBy=timers.target

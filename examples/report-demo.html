@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UbuntuGuard report</title>
+<style>
+body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0;
+       background: #f5f6f8; color: #1f2328; }
+header { background: #111827; color: #f9fafb; padding: 24px 32px; }
+header h1 { margin: 0 0 4px; font-size: 22px; }
+header p { margin: 0; color: #cbd5e1; font-size: 13px; }
+main { max-width: 1100px; margin: 24px auto; padding: 0 20px 40px; }
+section { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px;
+          padding: 18px 20px; margin-bottom: 18px; }
+h2 { font-size: 16px; margin: 0 0 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid #eef0f3;
+         vertical-align: top; }
+th { background: #f9fafb; font-weight: 600; color: #4b5563; }
+.badge { display: inline-block; padding: 1px 7px; border-radius: 10px;
+         font-size: 11px; font-weight: 600; text-transform: uppercase; }
+.critical { background: #fee2e2; color: #991b1b; }
+.high { background: #ffedd5; color: #9a3412; }
+.medium { background: #fef9c3; color: #854d0e; }
+.low { background: #dbeafe; color: #1e40af; }
+.info { background: #e5e7eb; color: #374151; }
+.ok { background: #dcfce7; color: #166534; }
+.skipped { background: #e5e7eb; color: #4b5563; }
+.cards { display: flex; gap: 14px; flex-wrap: wrap; }
+.card { flex: 1 1 160px; background: #f9fafb; border: 1px solid #e5e7eb;
+        border-radius: 8px; padding: 12px 14px; }
+.card span { display: block; color: #6b7280; font-size: 12px; margin-bottom: 4px; }
+.card strong { font-size: 20px; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+ul { margin: 6px 0 0; padding-left: 20px; font-size: 13px; }
+.muted { color: #6b7280; font-size: 12px; }
+</style></head><body>
+<header><h1>UbuntuGuard report</h1>
+<p>violet · Ubuntu 24.04.4 LTS · kernel 6.18.33.2-microsoft-standard-WSL2 · 2026-11-17T10:51:20+08:00</p></header>
+<main>
+<section><h2>Overview</h2><div class="cards">
+<div class="card"><span>Audit score</span><strong>0/100 (E)</strong></div>
+<div class="card"><span>Audit findings</span><strong>17</strong></div>
+<div class="card"><span>Detection findings</span><strong>3</strong></div>
+<div class="card"><span>Health checks</span><strong>5 checks, 0 critical</strong></div>
+</div></section>
+<section><h2>Audit findings</h2><table><thead><tr><th>ID</th><th>Severity</th><th>Finding</th><th>Evidence</th></tr></thead><tbody><tr><td><code>SSH-001</code></td><td><span class="badge high">high</span></td><td>SSH root login is not disabled<div class="muted">Set &#x27;PermitRootLogin no&#x27; in /etc/ssh/sshd_config.d/99-ubuntuguard.conf</div></td><td><code>key=PermitRootLogin, value=without-password, source=sshd -T</code></td></tr><tr><td><code>SSH-002</code></td><td><span class="badge high">high</span></td><td>SSH password authentication is enabled<div class="muted">Set &#x27;PasswordAuthentication no&#x27; and require SSH keys before applying</div></td><td><code>key=PasswordAuthentication, value=yes, source=sshd -T</code></td></tr><tr><td><code>FW-001</code></td><td><span class="badge high">high</span></td><td>Host firewall is not active<div class="muted">Enable the firewall: &#x27;ufw default deny incoming&#x27; then &#x27;ufw enable&#x27;</div></td><td><code>active=False, default_incoming=unknown, rules=0</code></td></tr><tr><td><code>SSH-004</code></td><td><span class="badge medium">medium</span></td><td>SSH X11 forwarding is enabled<div class="muted">Set &#x27;X11Forwarding no&#x27; unless X11 tunneling is a documented requirement</div></td><td><code>key=X11Forwarding, value=yes, source=sshd -T</code></td></tr><tr><td><code>SSH-005</code></td><td><span class="badge medium">medium</span></td><td>SSH MaxAuthTries exceeds 4<div class="muted">Set &#x27;MaxAuthTries 4&#x27; in /etc/ssh/sshd_config.d/99-ubuntuguard.conf</div></td><td><code>key=MaxAuthTries, value=6, source=sshd -T</code></td></tr><tr><td><code>SSH-010</code></td><td><span class="badge medium">medium</span></td><td>SSH LoginGraceTime exceeds 60 seconds<div class="muted">Set &#x27;LoginGraceTime 60&#x27; or less</div></td><td><code>key=LoginGraceTime, value=120, source=sshd -T</code></td></tr><tr><td><code>SSH-012</code></td><td><span class="badge medium">medium</span></td><td>SSH access is not limited to specific users or groups<div class="muted">Restrict SSH access with &#x27;AllowUsers&#x27; or &#x27;AllowGroups&#x27;</div></td><td><code>key=AllowUsers/AllowGroups, value=AllowUsers=&#x27;&#x27; AllowGroups=&#x27;&#x27;, source=sshd -T</code></td></tr><tr><td><code>SSH-015</code></td><td><span class="badge medium">medium</span></td><td>SSH allows weak MAC algorithms<div class="muted">Use ETM HMAC-SHA2 MAC algorithms only</div></td><td><code>key=MACs, value=hmac-sha1, umac-64@openssh.com, source=sshd -T</code></td></tr><tr><td><code>LOGIN-001</code></td><td><span class="badge medium">medium</span></td><td>Password maximum age exceeds 365 days or is unset<div class="muted">Set &#x27;PASS_MAX_DAYS 365&#x27; in /etc/login.defs</div></td><td><code>key=PASS_MAX_DAYS, value=99999</code></td></tr><tr><td><code>LOGIN-004</code></td><td><span class="badge medium">medium</span></td><td>Default UMASK is weaker than 027<div class="muted">Set &#x27;UMASK 027&#x27; in /etc/login.defs</div></td><td><code>key=UMASK, value=022</code></td></tr><tr><td><code>SYS-004</code></td><td><span class="badge medium">medium</span></td><td>ICMP redirects are accepted or sent<div class="muted">Set accept_redirects = 0 and send_redirects = 0</div></td><td><code>mismatched={&#x27;net.ipv4.conf.all.send_redirects&#x27;: &#x27;1&#x27;}</code></td></tr><tr><td><code>SYS-005</code></td><td><span class="badge medium">medium</span></td><td>IPv4 source routing, martian logging or broadcast ICMP is not hardened<div class="muted">Set accept_source_route = 0, log_martians = 1 and icmp_echo_ignore_broadcasts = 1</div></td><td><code>mismatched={&#x27;net.ipv4.conf.all.log_martians&#x27;: &#x27;0&#x27;}</code></td></tr><tr><td><code>SSH-011</code></td><td><span class="badge low">low</span></td><td>SSH idle timeout is not configured<div class="muted">Set &#x27;ClientAliveInterval 300&#x27; and &#x27;ClientAliveCountMax 3&#x27;</div></td><td><code>key=ClientAliveInterval, value=0, source=sshd -T</code></td></tr><tr><td><code>SSH-013</code></td><td><span class="badge low">low</span></td><td>SSH warning banner is not configured<div class="muted">Set &#x27;Banner /etc/issue.net&#x27; and maintain the banner text</div></td><td><code>key=Banner, value=none, source=sshd -T</code></td></tr><tr><td><code>LOGIN-002</code></td><td><span class="badge low">low</span></td><td>Password minimum age is less than 1 day<div class="muted">Set &#x27;PASS_MIN_DAYS 1&#x27; in /etc/login.defs</div></td><td><code>key=PASS_MIN_DAYS, value=0</code></td></tr><tr><td><code>SYS-003</code></td><td><span class="badge low">low</span></td><td>IPv4 reverse path filtering is not enabled<div class="muted">Set rp_filter = 1 for all and default interfaces</div></td><td><code>mismatched={&#x27;net.ipv4.conf.all.rp_filter&#x27;: &#x27;2&#x27;, &#x27;net.ipv4.conf.default.rp_filter&#x27;: &#x27;2&#x27;}</code></td></tr><tr><td><code>SYS-006</code></td><td><span class="badge low">low</span></td><td>Kernel information leak protections are disabled<div class="muted">Set dmesg_restrict = 1 and kptr_restrict = 1</div></td><td><code>mismatched={&#x27;kernel.dmesg_restrict&#x27;: &#x27;0&#x27;}</code></td></tr></tbody></table></section>
+<section><h2>Detection findings</h2><table><thead><tr><th>ID</th><th>Severity</th><th>Finding</th><th>Evidence</th></tr></thead><tbody><tr><td><code>AUD-002</code></td><td><span class="badge medium">medium</span></td><td>auditd service is not active<div class="muted">Enable and start auditd: &#x27;systemctl enable --now auditd&#x27;</div></td><td><code>rule_count=8</code></td></tr><tr><td><code>AUD-003</code></td><td><span class="badge low">low</span></td><td>auditd does not watch sensitive paths<div class="muted">Add -w rules for /etc/sudoers and /etc/ssh in audit rules</div></td><td><code>missing_watches=[&#x27;/etc/sudoers&#x27;, &#x27;/etc/ssh&#x27;], watched_paths=[]</code></td></tr><tr><td><code>AID-002</code></td><td><span class="badge low">low</span></td><td>AIDE database is missing<div class="muted">Initialize the AIDE database: &#x27;aideinit&#x27;</div></td><td><code>installed=True, database_present=False</code></td></tr></tbody></table></section>
+<section><h2>Health checks</h2><table><thead><tr><th>Check</th><th>Status</th><th>Value</th><th>Threshold</th><th>Detail</th></tr></thead><tbody><tr><td>cpu</td><td><span class="badge ok">ok</span></td><td>1.5</td><td>85.0</td><td>1.5% &lt;= 85.0%</td></tr><tr><td>memory</td><td><span class="badge ok">ok</span></td><td>10.9</td><td>85.0</td><td>10.9% &lt;= 85.0%</td></tr><tr><td>disk:/</td><td><span class="badge ok">ok</span></td><td>0.1</td><td>85.0</td><td>0.1% &lt;= 85.0%</td></tr><tr><td>load</td><td><span class="badge ok">ok</span></td><td>0.03</td><td>1.5</td><td>0.03 &lt;= 1.5</td></tr><tr><td>service:ssh</td><td><span class="badge ok">ok</span></td><td>1.0</td><td>1.0</td><td>active</td></tr></tbody></table></section>
+<section><h2>Skipped checks</h2><ul><li>SUDO-001: sudoers not readable (requires root)</li><li>SUDO-002: /etc/sudoers metadata unavailable</li></ul></section>
+
+<section><h2>Metadata</h2><p class="muted">schema 1.0 · generated by UbuntuGuard 0.1.0</p></section>
+</main></body></html>

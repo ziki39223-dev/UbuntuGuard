@@ -1,0 +1,9 @@
+[Unit]
+Description=UbuntuGuard scheduled security report
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/ubuntuguard report --format html --out /var/lib/ubuntuguard/reports/latest.html
+Nice=10

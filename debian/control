@@ -1,0 +1,17 @@
+Source: ubuntuguard
+Section: admin
+Priority: optional
+Maintainer: UbuntuGuard Maintainer <maintainer@example.invalid>
+Build-Depends: debhelper-compat (= 13), dh-python, pybuild-plugin-pyproject,
+ python3-all, python3-setuptools, python3-yaml
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: ubuntuguard
+Architecture: all
+Depends: python3, python3-yaml, ${misc:Depends}
+Description: Ubuntu security baseline audit and reversible hardening CLI
+ UbuntuGuard collects host information, runs a 40-rule security baseline,
+ plans and applies reversible hardening through drop-in configuration files,
+ detects login and integrity anomalies, monitors host health and manages
+ configuration backups with checksum verification.

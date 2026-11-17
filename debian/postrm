@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+    systemctl daemon-reload || true
+fi
+
+if [ "$1" = "purge" ]; then
+    rm -rf /var/lib/ubuntuguard /etc/ubuntuguard /var/log/ubuntuguard
+fi
+
+#DEBHELPER#
+
+exit 0

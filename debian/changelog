@@ -1,0 +1,13 @@
+ubuntuguard (1.0.0-1) unstable; urgency=medium
+
+  * First stable release: 40-rule baseline audit, reversible hardening,
+    detection, monitoring, backups, reports and systemd integration.
+  * Verified on Ubuntu 22.04.5 and 24.04.4 with 163 automated tests.
+
+ -- UbuntuGuard Maintainer <maintainer@example.invalid>  Tue, 17 Nov 2026 00:00:00 +0800
+
+ubuntuguard (0.1.0-1) unstable; urgency=medium
+
+  * Initial release.
+
+ -- UbuntuGuard Maintainer <maintainer@example.invalid>  Tue, 17 Nov 2026 00:00:00 +0800

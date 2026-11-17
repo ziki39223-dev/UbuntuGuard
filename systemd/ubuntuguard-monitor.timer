@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the UbuntuGuard health check periodically
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Persistent=true
+Unit=ubuntuguard-monitor.service
+
+[Install]
+WantedBy=timers.target
