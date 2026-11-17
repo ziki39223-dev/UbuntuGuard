@@ -36,3 +36,22 @@ Description: Ubuntu security baseline audit and reversible hardening CLI
  detects login and integrity anomalies, monitors host health and manages
  configuration backups with checksum verification.
 
+Package: ubuntuguard
+Version: 1.0.2-1
+Architecture: all
+Maintainer: UbuntuGuard Maintainer <maintainer@example.invalid>
+Installed-Size: 376
+Depends: python3, python3-yaml
+Filename: pool/main/u/ubuntuguard/ubuntuguard_1.0.2-1_all.deb
+Size: 65642
+MD5sum: b378cbcda09d8568ff8cf96e3f722237
+SHA1: 795c835f17a938ec84dc9a9889d0ddd73c6af47d
+SHA256: 91f53d53cebcfdb41be09d6f9eccc3337471880278bee30085a9990262476857
+Section: admin
+Priority: optional
+Description: Ubuntu security baseline audit and reversible hardening CLI
+ UbuntuGuard collects host information, runs a 40-rule security baseline,
+ plans and applies reversible hardening through drop-in configuration files,
+ detects login and integrity anomalies, monitors host health and manages
+ configuration backups with checksum verification.
+
