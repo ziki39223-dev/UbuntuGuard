@@ -198,10 +198,14 @@
   5. deb 构建缺少 `pybuild-plugin-pyproject`；`debian/install` 与 systemd 单元被标记可执行 → 补构建依赖并修正权限
   6. Lynis 标题包含原始 `|` 分隔字段 → 解析出测试 ID 与消息
   7. deb 升级后仍显示旧版本（stale `__pycache__`）→ 干净重建并在 postinst 清理旧字节码，0.1.0 → 1.0.0 升级验证通过
+- CI（GitHub Actions，run 44009691653，commit 23f5463）：
+  - `test (ubuntu-22.04, 3.10)`：ruff / mypy / pytest / wheel 全部通过
+  - `test (ubuntu-24.04, 3.12)`：ruff / mypy / pytest / wheel / deb 构建 / deb 冒烟（`--version`、`config validate`）全部通过
+  - 首跑暴露并修复：非 root 状态下 `/var/lib/ubuntuguard` 与 `/etc/shadow` 不可读写；deb 构建缺 `build-essential`、`python3-all`、`python3-setuptools`，且 runner 默认 pybuild 使用无 setuptools 的 toolcache Python
+- 发布：tag `v1.0.0` 与 GitHub Release 已创建
 - 未决：
   - WSL2 与真实服务器差异：auditd 无法启动、AIDE 未初始化、UFW/公网暴露场景未覆盖（R-018）
   - Ubuntu 22.04 的 setuptools 低于 68，deb 仅在 24.04 构建；22.04 使用源码/venv 验证
-  - CIS 具体控制号仍未逐条对照官方 Benchmark（R-012）
-  - GitHub Actions 尚未首次运行，GitHub Release 未发布
+  - CIS 编号基于 ComplianceAsCode 控制文件，官方 PDF 更新后需复核（R-012）
 
 > 后续阶段按 ROADMAP 顺序追加，未通过验收不得标注完成。

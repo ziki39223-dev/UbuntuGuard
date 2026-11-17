@@ -1,7 +1,7 @@
 # PROJECT_STATUS
 
-当前阶段：Phase 9（最终测试与发布）
-状态：进行中（双版本实机验证完成，待 CIS 校准与发布）
+当前阶段：Phase 9（已完成并发布）
+状态：v1.0.0 已发布（双版本 CI 通过，GitHub Release 已创建）
 最近更新：2026-11-17
 
 ## 阶段进度
@@ -17,7 +17,7 @@
 | Phase 6 | 系统健康监控 | 第 21～23 天 | 已完成 | 通过（proc/node_exporter 指标、阈值检查、Webhook；147 项单测） |
 | Phase 7 | 备份与恢复 | 第 24～26 天 | 已完成 | 通过（压缩、保留、校验、差异预检、恢复与演练；155 项单测） |
 | Phase 8 | 工程化与系统集成 | 第 27～29 天 | 已完成 | 通过（报告、systemd、deb 构建与安装/升级/卸载、CI、Ansible） |
-| Phase 9 | 最终测试与发布 | 第 30～35 天 | 进行中 | 双版本 164 项测试通过；CIS 映射完成；deb 安装/升级/卸载验证；待 GitHub Actions 与 Release |
+| Phase 9 | 最终测试与发布 | 第 30～35 天 | 已完成 | 双版本 164 项测试通过；CIS 映射完成；deb 安装/升级/卸载验证；GitHub Actions 双版本矩阵通过（deb 构建+冒烟）；v1.0.0 tag 与 Release 已发布 |
 
 ## 已完成模块
 
@@ -40,13 +40,13 @@
 
 ## 进行中
 
-Phase 9 剩余项：GitHub Actions 首次运行与 v1.0.0 Release 发布。
+无。v1.0.0 已发布：https://github.com/ziki39223-dev/UbuntuGuard/releases/tag/v1.0.0
 
-## 下一步（Phase 9 收尾）
+## 后续可选事项
 
-1. 推送仓库并首次运行 GitHub Actions。
-2. 生成 v1.0.0 Release 说明并打 tag。
-3. 建议在真实云主机补一轮 UFW/auditd/公网暴露验证（R-018）。
+1. 在真实云主机补一轮 UFW/auditd/公网暴露验证（R-018）。
+2. 关注 CIS 官方 PDF 版本更新，按需复核 `docs/CIS_MAPPING.md`。
+3. 视需要补充 LICENSE 与打包签名。
 
 ## 待维护文档
 
