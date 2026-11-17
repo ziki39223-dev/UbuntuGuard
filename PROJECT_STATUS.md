@@ -48,8 +48,10 @@
 ## 后续可选事项
 
 1. 如需覆盖云厂商 24.04 镜像，再开一台 Ubuntu 24.04 云主机复跑集成脚本。
-2. 关注 CIS 官方 PDF 版本更新，按需复核 `docs/CIS_MAPPING.md`。
-3. 如需 Launchpad PPA，可基于现有源码用 `dpkg-buildpackage -S -sa -k<指纹>` 生成 `.dsc`/`.changes` 后 `dput` 上传。
+2. Web 公网访问：在安全组放行 80/443 后，用 Nginx + Basic Auth + HTTPS 反向代理；当前云主机仅通过 SSH 隧道访问。
+3. Web 登录 / RBAC / 操作审计，满足多人使用；当前仅适合本机或隧道。
+4. 关注 CIS 官方 PDF 版本更新，按需复核 `docs/CIS_MAPPING.md`。
+5. 如需 Launchpad PPA，可基于现有源码用 `dpkg-buildpackage -S -sa -k<指纹>` 生成 `.dsc`/`.changes` 后 `dput` 上传。
 
 ## 待维护文档
 
