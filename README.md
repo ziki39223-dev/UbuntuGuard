@@ -130,6 +130,7 @@ dpkg-buildpackage -us -uc -b
 | [docs/ECOSYSTEM_AND_POSITIONING.md](docs/ECOSYSTEM_AND_POSITIONING.md) | 生态调研与差异化定位 |
 | [docs/CIS_MAPPING.md](docs/CIS_MAPPING.md) | 40 条规则与 CIS 控制编号对照 |
 | [docs/PACKAGE_SIGNING.md](docs/PACKAGE_SIGNING.md) | GPG 签名密钥、APT 仓库构建与发布 |
+| [docs/PPA.md](docs/PPA.md) | Launchpad PPA 源码包构建与上传流程 |
 | [ROADMAP.md](ROADMAP.md) | 阶段任务清单 |
 | [PROJECT_STATUS.md](PROJECT_STATUS.md) | 当前进度 |
 | [RISK_REGISTER.md](RISK_REGISTER.md) | 风险与应对 |

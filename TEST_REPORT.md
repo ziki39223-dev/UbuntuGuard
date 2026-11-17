@@ -227,8 +227,8 @@
 
 ### Phase 9 补充：阿里云 ECS 公网验证（v1.0.2）
 
-- 环境：阿里云 ECS 试用实例（华东1 杭州，2 核 2G，Ubuntu 22.04.5，公网 IP 118.178.95.11），安全组默认放行 22/3389/ICMP
-- 部署：venv 源码安装（22.04 无可用的 noble deb），`systemd install` 默认参数
+- 环境：阿里云 ECS 试用实例（华东1 杭州，2 核 2G，公网 IP 118.178.95.11），先以 Ubuntu 22.04.5 验证，随后更换系统盘复测 Ubuntu 24.04.5
+- 部署：22.04 使用 venv 源码安装；24.04 直接从签名 APT 仓库安装 `ubuntuguard 1.0.2`
 - 结果（第二轮，修复后）：34 项断言全部通过
   - 加固前 16 findings（score 0）→ 加固后 10 findings（score 37）；`FW-001` 消除
   - `sshd -T`：PasswordAuthentication no、MaxAuthTries 4、PermitRootLogin prohibit-password
@@ -242,8 +242,8 @@
   1. **jammy 仓库提供了不兼容 deb**：noble 构建的包安装到 `/usr/lib/python3.12/dist-packages`，22.04 的 Python 3.10 报 `ModuleNotFoundError`。仓库默认改为仅 noble，22.04 使用源码/venv
   2. **`systemd install` 默认参数报错**：内置 `monitor_interval=5min` 被校验正则拒绝（`invalid interval: '5min'`）。正则改为接受 `5min`/`15mins`，并更新单测
   3. 云主机上曾出现 `00-ubuntuguard.conf` 残留导致密码登录被关闭；通过云助手清理并补充 SSH 公钥，验证了控制台恢复路径
+- 24.04 复测：更换系统盘为 Ubuntu 24.04.5 后，签名仓库安装与集成脚本再次 34/34 通过；差异项未出现（cloud-init drop-in、auditd、systemd 均正常）
 - 未决：
-  - 安全组同时放行 3389 时，外部探测仍不可达（UFW/host 阻止），但未能完成“UFW allow 后端口开放”的正向对照，记录为待复核
-  - 云厂商 24.04 镜像差异尚未验证（当前仅 22.04 云镜像）
+  - 安全组同时放行 3389 时，外部探测仍不可达（UFW/host 阻止），未能完成“UFW allow 后端口开放”的正向对照，记录为待复核
 
 > 后续阶段按 ROADMAP 顺序追加，未通过验收不得标注完成。

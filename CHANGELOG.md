@@ -9,9 +9,13 @@
 - **`systemd install` 在无打包配置的主机上失败**：内置默认 `monitor_interval=5min`，但校验正则只接受 `s/m/h/d`，报 `invalid interval: '5min'` 并以退出码 2 结束。现接受 `5min`、`15mins` 等 systemd 常见写法，并补充单测。
 - **APT 仓库不再对 jammy 提供不兼容包**：noble 构建的 deb 安装到 `/usr/lib/python3.12/dist-packages`，22.04 的 Python 3.10 无法导入。仓库默认只生成 `noble`，22.04 改用源码/venv 安装，README 与 `docs/PACKAGE_SIGNING.md` 已同步。
 
+### Added
+
+- `scripts/build-ppa-source.sh` 与 `docs/PPA.md`：生成带签名的 `.dsc`/`_source.changes`，可直接 `dput` 到 Launchpad PPA；`debian/copyright` 补齐 DEP-5 元数据。
+
 ### Verified
 
-- 阿里云 ECS（Ubuntu 22.04.5，公网 IP）：安装后集成脚本 34 项断言全部通过；公网扫描仅 22 可达，80/443/3306 关闭，主机 `INPUT DROP` 且仅放行 22。
+- 阿里云 ECS（Ubuntu 22.04.5 与 24.04.5，公网 IP）：两轮集成脚本均 34 项断言全部通过；24.04 直接从签名仓库安装 1.0.2；公网扫描仅 22 可达，80/443/3306 关闭，主机 `INPUT DROP` 且仅放行 22。
 
 ## [1.0.1] - 2026-11-17
 

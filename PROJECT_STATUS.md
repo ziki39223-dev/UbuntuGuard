@@ -38,7 +38,7 @@
 | Phase 8 工程化 | `report`（合并 JSON/自包含 HTML）、`export ansible`、`systemd install/uninstall`（4 个单元，audit 6h / monitor 5min）、debian/ 打包与安装脚本、GitHub Actions 双版本矩阵（ruff/mypy/pytest/wheel/deb）；162 项单测通过 |
 | Phase 9 实机验证 | 建立 WSL2 Ubuntu 22.04.5（3.10）与 24.04.4（3.12）环境；双版本 164 项测试 + ruff/mypy；实机 audit/detect/monitor/backup/harden/report；SSH 与 sysctl 加固生效校验及恢复；24.04 构建 deb 并完成安装/升级/卸载；Lynis 对照（47 项）；CIS 映射写入 `docs/CIS_MAPPING.md`；修复 sshd 别名、/run/sshd、备份缺失目标、deb 依赖与权限等问题 |
 | 发布与集成 | GPG 签名 APT 仓库（`scripts/build-apt-repo.sh`、`packaging/apt/`、GitHub Pages）；CI 三个任务（双版本矩阵、apt-repo 签名安装、真实 systemd 集成）；集成测试暴露并修复 SSH drop-in 被 cloud-init 覆盖（99→00）、sshd 未运行时 reload 失败、`systemd install` 拒绝 `5min`，发布 v1.0.2 |
-| 公有云验证 | 阿里云 ECS（Ubuntu 22.04.5，公网 IP）：34 项集成断言全部通过；加固前后 findings 16→10；公网扫描仅 22 开放；修复 jammy 仓库不兼容包（仓库改为 noble-only，22.04 用 venv）；R-018 关闭 |
+| 公有云验证 | 阿里云 ECS（Ubuntu 22.04.5 与 24.04.5 双镜像）：两轮 34 项集成断言全部通过；24.04 直接安装签名仓库 deb；加固前后 findings 16→10；公网扫描仅 22 开放；R-018 关闭 |
 
 ## 进行中
 
