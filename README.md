@@ -8,6 +8,10 @@
 
 当前版本：**v1.0.2**。收集 → 审计 → 加固 → 检测 → 监控 → 备份 → 报告全链路可用；40 条规则对齐 CIS，加固支持快照、生效校验与回滚。已在阿里云 Ubuntu 22.04 公网实例完成端到端验证。
 
+![UbuntuGuard 架构图](docs/architecture.svg)
+
+English documentation: [README.en.md](README.en.md)
+
 ## 设计边界
 
 UbuntuGuard 不重写审计引擎、监控栈与 IDS：

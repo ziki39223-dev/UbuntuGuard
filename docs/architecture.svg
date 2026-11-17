@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="830" viewBox="0 0 1100 830" role="img" aria-labelledby="title desc">
+  <title id="title">UbuntuGuard layered architecture</title>
+  <desc id="desc">CLI calls a domain layer (collectors, security and hardening, audit and monitoring, delivery), which uses a core layer (executor, config, logger, permissions) and integrates with host components such as sshd, ufw, auditd and AIDE.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7c"/>
+    </marker>
+    <style>
+      .title { font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: 26px; font-weight: 700; fill: #1c2b3a; }
+      .subtitle { font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: 13px; fill: #5b6b7c; }
+      .label { font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 700; fill: #5b6b7c; letter-spacing: 1px; }
+      .box-title { font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #1c2b3a; }
+      .item { font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: 12.5px; fill: #33475b; }
+      .chip { font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: 11.5px; fill: #33475b; }
+      .flow { font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 600; fill: #1c2b3a; }
+      .note { font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: 11px; fill: #6b7a8a; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1100" height="830" fill="#f7f9fc"/>
+  <text class="title" x="40" y="50">UbuntuGuard — Layered Architecture</text>
+  <text class="subtitle" x="40" y="76">Ubuntu 22.04 / 24.04 · Python ≥ 3.10 · runtime dependency: PyYAML only</text>
+
+  <!-- CLI -->
+  <rect x="40" y="98" width="1020" height="64" rx="10" fill="#1f4e79"/>
+  <text x="62" y="126" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#ffffff">CLI layer — cli/</text>
+  <text x="62" y="147" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#d6e6f5">argparse subcommands · global flags (--config, --json, --log-level) · exit codes 0–9 · text / JSON rendering</text>
+
+  <line x1="550" y1="162" x2="550" y2="203" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- Domain layer -->
+  <text class="label" x="40" y="198">DOMAIN LAYER</text>
+
+  <!-- Collectors -->
+  <rect x="40" y="208" width="240" height="200" rx="10" fill="#e8f1fb" stroke="#4a7fb5" stroke-width="1.4"/>
+  <text class="box-title" x="58" y="234">collectors/</text>
+  <text class="item" x="58" y="258">Read-only host inventory</text>
+  <text class="item" x="58" y="280">· system, network, firewall</text>
+  <text class="item" x="58" y="300">· users, packages, services</text>
+  <rect x="58" y="318" width="204" height="30" rx="6" fill="#ffffff" stroke="#c6d9ee"/>
+  <text class="chip" x="70" y="338">SystemSnapshot (models.py)</text>
+  <text class="note" x="58" y="372">No mutation, no subprocess</text>
+  <text class="note" x="58" y="390">outside core/executor</text>
+
+  <!-- Security -->
+  <rect x="300" y="208" width="240" height="200" rx="10" fill="#fff1e6" stroke="#d97a2b" stroke-width="1.4"/>
+  <text class="box-title" x="318" y="234">security/</text>
+  <text class="item" x="318" y="258">baseline engine · 40 CIS-mapped rules</text>
+  <text class="item" x="318" y="280">ssh · sysctl · firewall · fail2ban</text>
+  <text class="item" x="318" y="302">hardening orchestration:</text>
+  <rect x="318" y="314" width="204" height="52" rx="6" fill="#ffffff" stroke="#f0c9a8"/>
+  <text class="chip" x="330" y="334">plan → snapshot → apply</text>
+  <text class="chip" x="330" y="352">→ verify → rollback</text>
+  <text class="note" x="318" y="388">First-match sshd drop-in (00-)</text>
+
+  <!-- Audit and monitoring -->
+  <rect x="560" y="208" width="240" height="200" rx="10" fill="#eaf5ea" stroke="#4f9d5d" stroke-width="1.4"/>
+  <text class="box-title" x="578" y="234">audit/ · monitoring/</text>
+  <text class="item" x="578" y="258">· auth.log / journalctl events</text>
+  <text class="item" x="578" y="280">· auditd rules, AIDE status</text>
+  <text class="item" x="578" y="302">· SHA256 file baseline</text>
+  <text class="item" x="578" y="324">· suspicious process scan</text>
+  <text class="item" x="578" y="346">· CPU / memory / disk / service</text>
+  <text class="note" x="578" y="378">Findings carry file, line, value</text>
+
+  <!-- Delivery -->
+  <rect x="820" y="208" width="240" height="200" rx="10" fill="#f0ecf9" stroke="#7a5fb5" stroke-width="1.4"/>
+  <text class="box-title" x="838" y="234">backup/ · reporting/</text>
+  <text class="item" x="838" y="258">· manifest + SHA256 snapshots</text>
+  <text class="item" x="838" y="280">· restore preview and drill</text>
+  <text class="item" x="838" y="302">· retention (count + days)</text>
+  <text class="item" x="838" y="324">· text / JSON / HTML report</text>
+  <text class="item" x="838" y="346">· ansible export · systemd units</text>
+  <text class="note" x="838" y="378">HTML is self-contained, no Jinja2</text>
+
+  <line x1="550" y1="408" x2="550" y2="443" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- Core -->
+  <text class="label" x="40" y="438">CORE LAYER</text>
+  <rect x="40" y="448" width="1020" height="84" rx="10" fill="#eef1f4" stroke="#6b7a8a" stroke-width="1.4"/>
+  <rect x="56" y="462" width="232" height="56" rx="7" fill="#ffffff" stroke="#cfd8e0"/>
+  <text class="item" x="70" y="485" font-weight="700">executor/</text>
+  <text class="chip" x="70" y="505">argv lists, shell=False, timeout</text>
+  <rect x="300" y="462" width="232" height="56" rx="7" fill="#ffffff" stroke="#cfd8e0"/>
+  <text class="item" x="314" y="485" font-weight="700">config/</text>
+  <text class="chip" x="314" y="505">defaults, schema, invariants</text>
+  <rect x="544" y="462" width="232" height="56" rx="7" fill="#ffffff" stroke="#cfd8e0"/>
+  <text class="item" x="558" y="485" font-weight="700">logger/</text>
+  <text class="chip" x="558" y="505">structured ops audit log</text>
+  <rect x="788" y="462" width="256" height="56" rx="7" fill="#ffffff" stroke="#cfd8e0"/>
+  <text class="item" x="802" y="485" font-weight="700">permissions/</text>
+  <text class="chip" x="802" y="505">root, platform, dependency checks</text>
+
+  <line x1="550" y1="532" x2="550" y2="564" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- Host layer -->
+  <text class="label" x="40" y="558">HOST INTEGRATION</text>
+  <rect x="40" y="568" width="640" height="104" rx="10" fill="#fffbe6" stroke="#c9a227" stroke-width="1.4" stroke-dasharray="6 4"/>
+  <text class="box-title" x="58" y="592">System components (managed, not reimplemented)</text>
+  <rect x="58" y="606" width="86" height="28" rx="14" fill="#ffffff" stroke="#e3cf80"/><text class="chip" x="82" y="625">sshd</text>
+  <rect x="154" y="606" width="70" height="28" rx="14" fill="#ffffff" stroke="#e3cf80"/><text class="chip" x="178" y="625">ufw</text>
+  <rect x="234" y="606" width="90" height="28" rx="14" fill="#ffffff" stroke="#e3cf80"/><text class="chip" x="250" y="625">auditd</text>
+  <rect x="334" y="606" width="80" height="28" rx="14" fill="#ffffff" stroke="#e3cf80"/><text class="chip" x="355" y="625">AIDE</text>
+  <rect x="424" y="606" width="84" height="28" rx="14" fill="#ffffff" stroke="#e3cf80"/><text class="chip" x="438" y="625">sysctl</text>
+  <rect x="518" y="606" width="140" height="28" rx="14" fill="#ffffff" stroke="#e3cf80"/><text class="chip" x="530" y="625">systemd timers</text>
+  <text class="note" x="58" y="656">Optional backends: Lynis (audit), node_exporter (metrics)</text>
+
+  <rect x="700" y="568" width="360" height="104" rx="10" fill="#ffffff" stroke="#9fb0c0" stroke-width="1.4"/>
+  <text class="box-title" x="718" y="592">State and configuration</text>
+  <text class="item" x="718" y="616">/etc/ubuntuguard/config.yaml</text>
+  <text class="item" x="718" y="638">/var/lib/ubuntuguard (snapshots, baselines)</text>
+  <text class="item" x="718" y="660">/var/log/ubuntuguard (events.jsonl)</text>
+
+  <!-- Flow -->
+  <text class="label" x="40" y="700">PRIMARY FLOW</text>
+  <rect x="40" y="712" width="1020" height="58" rx="10" fill="#ffffff" stroke="#c3cfda"/>
+  <text class="flow" x="62" y="746">collect</text>
+  <text class="flow" x="150" y="746" fill="#7f8fa0">→</text>
+  <text class="flow" x="172" y="746">audit</text>
+  <text class="flow" x="242" y="746" fill="#7f8fa0">→</text>
+  <text class="flow" x="264" y="746">plan / confirm</text>
+  <text class="flow" x="380" y="746" fill="#7f8fa0">→</text>
+  <text class="flow" x="402" y="746">snapshot + apply</text>
+  <text class="flow" x="536" y="746" fill="#7f8fa0">→</text>
+  <text class="flow" x="558" y="746">verify (sshd -T / ufw / sysctl)</text>
+  <text class="flow" x="792" y="746" fill="#7f8fa0">→</text>
+  <text class="flow" x="814" y="746">report</text>
+  <text class="note" x="62" y="764">any verification failure restores the snapshot and rolls the runtime change back (exit code 6 / 7)</text>
+
+  <text class="note" x="40" y="806">Design principle: detection and mutation are separate; every mutation is planned, confirmed, snapshotted, verified and reversible.</text>
+</svg>
