@@ -8,6 +8,7 @@ version = "1.0.0"
 description = "Ubuntu security baseline audit and reversible hardening CLI"
 readme = "README.md"
 requires-python = ">=3.10"
+license = {text = "MIT"}
 dependencies = ["PyYAML>=6.0"]
 
 [project.optional-dependencies]

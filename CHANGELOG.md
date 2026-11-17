@@ -8,6 +8,7 @@
 
 - 项目目录骨架（src / tests / scripts / configs / systemd / packaging / docs / examples）
 - 项目管理文档：PROJECT_STATUS、ROADMAP、ARCHITECTURE、DECISIONS、TEST_REPORT、RISK_REGISTER
+- 采用 MIT 许可证（LICENSE + pyproject license 元数据）
 - Phase 0 定稿：
   - ARCHITECTURE.md 架构设计（分层、核心抽象、数据流、安全边界、兼容策略）
   - docs/TECHNICAL_DESIGN.md 技术方案（CLI 规范与退出码、YAML 配置 schema、日志规范、报告 schema、风险评分、22.04/24.04 差异清单、备份布局、权限模型、打包与测试策略）

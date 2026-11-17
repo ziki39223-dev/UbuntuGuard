@@ -1,8 +1,12 @@
 # UbuntuGuard
 
+[![CI](https://github.com/ziki39223-dev/UbuntuGuard/actions/workflows/ci.yml/badge.svg)](https://github.com/ziki39223-dev/UbuntuGuard/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/ziki39223-dev/UbuntuGuard)](https://github.com/ziki39223-dev/UbuntuGuard/releases/tag/v1.0.0)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 面向 Ubuntu 22.04 / 24.04 的自动化安全运维与主机健康保障 CLI 工具。
 
-当前进度：**Phase 1（核心执行引擎）**。已实现可安装的 CLI 框架、配置加载与校验、结构化日志、安全命令执行器、权限与环境检查。
+当前版本：**v1.0.0**。收集 → 审计 → 加固 → 检测 → 监控 → 备份 → 报告全链路可用；40 条规则对齐 CIS，加固支持快照、生效校验与回滚。
 
 ## 设计边界
 
@@ -17,7 +21,11 @@ UbuntuGuard 不重写审计引擎、监控栈与 IDS：
 ## 安装
 
 ```bash
+# 源码
 python3 -m pip install -e ".[dev]"
+
+# deb（Ubuntu 24.04，从 Release 下载）
+sudo apt install ./ubuntuguard_1.0.0-1_all.deb
 ```
 
 要求 Python ≥ 3.10，运行期仅依赖 PyYAML；HTML 报告使用内置渲染器，无需模板引擎。
